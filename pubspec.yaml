@@ -1,0 +1,47 @@
+name: ecommerce_app
+description: Flutter eCommerce app
+publish_to: "none"
+version: 0.0.1+1
+
+environment:
+  sdk: ">=3.1.0 <4.0.0"
+  flutter: 3.13.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  #General
+  flutter_launcher_icons: 0.13.1
+
+  #UI
+  flutter_layout_grid: 2.0.5
+  flutter_rating_bar: 4.0.1
+
+  #Utils
+  intl: 0.18.1
+  collection: 1.17.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter_lints: 2.0.3
+
+flutter_launcher_icons:
+  ios: true
+  android: true
+  remove_alpha_ios: true
+  image_path_ios: "assets/app-icon.png"
+  image_path_android: "assets/app-icon.png"
+  # https://github.com/fluttercommunity/flutter_launcher_icons/issues/144
+  adaptive_icon_background: "assets/app-icon-background.png"
+  adaptive_icon_foreground: "assets/app-icon-foreground.png"
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  assets:
+    - assets/products/
