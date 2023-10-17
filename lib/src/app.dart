@@ -1,15 +1,15 @@
-import 'package:ecommerce_app/src/features/products_list/products_list_screen.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) => MaterialApp(
+  Widget build(BuildContext context) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         restorationScopeId: 'app',
-        home: const ProductsListScreen(),
+        routerConfig: router,
         onGenerateTitle: (BuildContext context) => 'My Shop'.hardcoded,
         theme: ThemeData(
           primarySwatch: Colors.grey,

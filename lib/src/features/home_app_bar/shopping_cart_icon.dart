@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
-import 'package:ecommerce_app/src/features/shopping_cart/shopping_cart_screen.dart';
+import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ShoppingCartIcon extends StatelessWidget {
   const ShoppingCartIcon({super.key});
@@ -18,12 +19,7 @@ class ShoppingCartIcon extends StatelessWidget {
           child: IconButton(
             key: shoppingCartIconKey,
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(
-                fullscreenDialog: true,
-                builder: (_) => const ShoppingCartScreen(),
-              ),
-            ),
+            onPressed: () => context.pushNamed(AppRoute.cart.name),
           ),
         ),
         if (cartItemsCount > 0)

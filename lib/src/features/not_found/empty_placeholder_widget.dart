@@ -1,7 +1,9 @@
 import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EmptyPlaceholderWidget extends StatelessWidget {
   const EmptyPlaceholderWidget({
@@ -26,7 +28,7 @@ class EmptyPlaceholderWidget extends StatelessWidget {
               ),
               gapH32,
               PrimaryButton(
-                onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
+                onPressed: () => context.goNamed(AppRoute.home.name),
                 text: 'Go Home'.hardcoded,
               ),
             ],

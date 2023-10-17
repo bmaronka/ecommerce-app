@@ -7,6 +7,7 @@ import 'package:ecommerce_app/src/features/product_page/product_reviews/product_
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/models/review.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LeaveReviewScreen extends StatelessWidget {
   const LeaveReviewScreen({
@@ -76,7 +77,7 @@ class _LeaveReviewFormState extends State<LeaveReviewForm> {
       // TODO: Submit review
       await showNotImplementedAlertDialog(context: context);
     }
-    Navigator.of(context).pop();
+    context.pop();
   }
 
   @override

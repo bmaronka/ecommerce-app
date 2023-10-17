@@ -1,9 +1,11 @@
 import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
+import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/models/app_user.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AccountScreen extends StatelessWidget {
   const AccountScreen({super.key});
@@ -15,7 +17,19 @@ class AccountScreen extends StatelessWidget {
           actions: [
             ActionTextButton(
               text: 'Logout'.hardcoded,
-              onPressed: Navigator.of(context).pop, // TODO: Sign out
+              onPressed: () async {
+                final goRouter = GoRouter.of(context);
+                final shouldLogout = await showAlertDialog(
+                  context: context,
+                  title: 'Are you sure?'.hardcoded,
+                  cancelActionText: 'Cancel'.hardcoded,
+                  defaultActionText: 'Logout'.hardcoded,
+                );
+
+                if (shouldLogout == true) {
+                  goRouter.pop();
+                }
+              }, // TODO: Sign out
             ),
           ],
         ),

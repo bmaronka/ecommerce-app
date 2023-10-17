@@ -15,6 +15,7 @@ dependencies:
 
   #General
   flutter_launcher_icons: 0.13.1
+  go_router: 11.1.4
 
   #UI
   flutter_layout_grid: 2.0.5
