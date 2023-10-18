@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/presentation/products_list/product_card.dart';
@@ -7,37 +8,42 @@ import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ProductsGrid extends StatelessWidget {
   const ProductsGrid({super.key});
 
-  // TODO: Read from data source
   @override
-  Widget build(BuildContext context) {
-    final products = FakeProductsRepository.instance.getProductList();
+  Widget build(BuildContext context) => Consumer(
+        builder: (context, ref, _) {
+          final productsListValue = ref.watch(productsListStreamProvider);
 
-    return products.isEmpty
-        ? Center(
-            child: Text(
-              'No products found'.hardcoded,
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          )
-        : ProductsLayoutGrid(
-            itemCount: products.length,
-            itemBuilder: (_, index) {
-              final product = products[index];
-              return ProductCard(
-                product: product,
-                onPressed: () => context.goNamed(
-                  AppRoute.product.name,
-                  pathParameters: {'id': product.id},
-                ),
-              );
-            },
+          return AsyncValueWidget(
+            value: productsListValue,
+            data: (products) => products.isEmpty
+                ? Center(
+                    child: Text(
+                      'No products found'.hardcoded,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                  )
+                : ProductsLayoutGrid(
+                    itemCount: products.length,
+                    itemBuilder: (_, index) {
+                      final product = products[index];
+                      return ProductCard(
+                        product: product,
+                        onPressed: () => context.goNamed(
+                          AppRoute.product.name,
+                          pathParameters: {'id': product.id},
+                        ),
+                      );
+                    },
+                  ),
           );
-  }
+        },
+      );
 }
 
 class ProductsLayoutGrid extends StatelessWidget {
