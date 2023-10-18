@@ -1,11 +1,10 @@
-import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/empty_placeholder_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
-import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/cart/presentation/add_to_cart/add_to_cart_widget.dart';
+import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/home_app_bar.dart';
 import 'package:ecommerce_app/src/features/products/presentation/product_screen/leave_review_action.dart';
@@ -26,7 +25,7 @@ class ProductScreen extends StatelessWidget {
   // TODO: Read from data source
   @override
   Widget build(BuildContext context) {
-    final product = kTestProducts.firstWhereOrNull((product) => product.id == productId);
+    final product = FakeProductsRepository.instance.getProduct(productId);
 
     return Scaffold(
       appBar: const HomeAppBar(),
