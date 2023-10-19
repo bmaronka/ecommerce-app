@@ -15,8 +15,9 @@ dependencies:
 
   #General
   flutter_launcher_icons: 0.13.1
-  go_router: 11.1.4
+  go_router: 10.1.3
   flutter_riverpod: 2.4.4
+  rxdart: 0.27.7
 
   #UI
   flutter_layout_grid: 2.0.5

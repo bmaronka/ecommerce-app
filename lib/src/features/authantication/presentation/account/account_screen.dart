@@ -2,52 +2,64 @@ import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
-import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
+import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/presentation/account/account_screen_controller.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/async_value_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends ConsumerWidget {
   const AccountScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text('Account'.hardcoded),
-          actions: [
-            ActionTextButton(
-              text: 'Logout'.hardcoded,
-              onPressed: () async {
-                final goRouter = GoRouter.of(context);
-                final shouldLogout = await showAlertDialog(
-                  context: context,
-                  title: 'Are you sure?'.hardcoded,
-                  cancelActionText: 'Cancel'.hardcoded,
-                  defaultActionText: 'Logout'.hardcoded,
-                );
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue>(
+      accountScreenControllerProvider,
+      (_, current) => current.showAlertDialogOnError(context),
+    );
 
-                if (shouldLogout == true) {
-                  goRouter.pop();
-                }
-              }, // TODO: Sign out
-            ),
-          ],
-        ),
-        body: const ResponsiveCenter(
-          padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
-          child: UserDataTable(),
-        ),
-      );
+    final state = ref.watch(accountScreenControllerProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: state.isLoading ? CircularProgressIndicator() : Text('Account'.hardcoded),
+        actions: [
+          ActionTextButton(
+            text: 'Logout'.hardcoded,
+            onPressed: state.isLoading ? null : () => _onLogoutTap(context, ref),
+          ),
+        ],
+      ),
+      body: const ResponsiveCenter(
+        padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
+        child: UserDataTable(),
+      ),
+    );
+  }
+
+  Future<void> _onLogoutTap(BuildContext context, WidgetRef ref) async {
+    final shouldLogout = await showAlertDialog(
+      context: context,
+      title: 'Are you sure?'.hardcoded,
+      cancelActionText: 'Cancel'.hardcoded,
+      defaultActionText: 'Logout'.hardcoded,
+    );
+
+    if (shouldLogout == true) {
+      await ref.read(accountScreenControllerProvider.notifier).signOut();
+    }
+  }
 }
 
-class UserDataTable extends StatelessWidget {
+class UserDataTable extends ConsumerWidget {
   const UserDataTable({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final style = Theme.of(context).textTheme.titleSmall!;
-    // TODO: get user from auth repository
-    const user = AppUser(uid: '123', email: 'test@test.com');
+    final user = ref.watch(authStateChangesProvider).value;
+
     return DataTable(
       columns: [
         DataColumn(
@@ -66,12 +78,12 @@ class UserDataTable extends StatelessWidget {
       rows: [
         _makeDataRow(
           'uid'.hardcoded,
-          user.uid,
+          user?.uid ?? '',
           style,
         ),
         _makeDataRow(
           'email'.hardcoded,
-          user.email ?? '',
+          user?.email ?? '',
           style,
         ),
       ],
