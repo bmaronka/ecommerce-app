@@ -3,11 +3,15 @@ import 'dart:async';
 import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeProductsRepository {
-  const FakeProductsRepository();
+  const FakeProductsRepository({
+    this.addDelay = true,
+  });
 
+  final bool addDelay;
   final List<Product> _products = kTestProducts;
 
   List<Product> getProductList() => _products;
@@ -15,12 +19,12 @@ class FakeProductsRepository {
   Product? getProduct(String id) => _products.firstWhereOrNull((product) => product.id == id);
 
   Future<List<Product>> fetchProductList() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await delay(addDelay);
     return _products;
   }
 
   Stream<List<Product>> watchProductList() async* {
-    await Future.delayed(const Duration(seconds: 2));
+    await delay(addDelay);
     yield _products;
   }
 
