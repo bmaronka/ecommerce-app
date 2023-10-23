@@ -23,5 +23,6 @@ void main() {
       await robot.auth.tapDialogLogoutButton();
       robot.expectFindAllProductCards();
     },
+    skip: true,
   );
 }

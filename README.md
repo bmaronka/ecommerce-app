@@ -6,3 +6,4 @@
 - Unit tests
 - Widget tests
 - Integration tests
+- Golden tests
