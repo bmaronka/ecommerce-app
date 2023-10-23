@@ -1,6 +1,9 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
+import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/account/account_screen.dart';
+import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_screen.dart';
+import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +13,92 @@ class AuthRobot {
 
   final WidgetTester tester;
 
+  //EmailPasswordSignInContents
+  Future<void> pumpEmailPasswordSignInContents({
+    required FakeAuthRepository authRepository,
+    required EmailPasswordSignInFormType formType,
+    VoidCallback? onSignedIn,
+  }) =>
+      tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            authRepositoryProvider.overrideWithValue(authRepository),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: EmailPasswordSignInContents(
+                formType: formType,
+                onSignedIn: onSignedIn,
+              ),
+            ),
+          ),
+        ),
+      );
+
+  Future<void> tapEmailAndPasswordSubmitButton() async {
+    final primaryButton = find.byType(PrimaryButton);
+    expect(primaryButton, findsOneWidget);
+    await tester.tap(primaryButton);
+    await tester.pump();
+  }
+
+  Future<void> enterEmail(String email) async {
+    final emailField = find.byKey(EmailPasswordSignInScreen.emailKey);
+    expect(emailField, findsOneWidget);
+    await tester.enterText(emailField, email);
+  }
+
+  Future<void> enterPassword(String password) async {
+    final passwordField = find.byKey(EmailPasswordSignInScreen.passwordKey);
+    expect(passwordField, findsOneWidget);
+    await tester.enterText(passwordField, password);
+  }
+
+  Future<void> tapOnNeedAnAccountButton() async {
+    final needAnAccountButton = find.text('Need an account? Register');
+    expect(needAnAccountButton, findsOneWidget);
+    await tester.tap(needAnAccountButton);
+    await tester.pump();
+  }
+
+  void expectCreateAnAccountSubmitButton() {
+    final createAnAccountSubmitButton = find.text('Create an account');
+    expect(createAnAccountSubmitButton, findsOneWidget);
+  }
+
+  void expectEmptyEmailValidationErrorFound() {
+    final emptyEmailValidationError = find.text('Email can\'t be empty');
+    expect(emptyEmailValidationError, findsOneWidget);
+  }
+
+  void expectEmptyPasswordValidationErrorFound() {
+    final emptyPasswordValidationError = find.text('Password can\'t be empty');
+    expect(emptyPasswordValidationError, findsOneWidget);
+  }
+
+  void expectInvalidEmailValidationErrorFound() {
+    final invalidEmailValidationError = find.text('Invalid email');
+    expect(invalidEmailValidationError, findsOneWidget);
+  }
+
+  void expectPasswordIsTooShortValidationErrorFound() {
+    final passwordIsTooShortValidationError = find.text('Password is too short');
+    expect(passwordIsTooShortValidationError, findsOneWidget);
+  }
+
+  Future<void> tapOnHaveAnAccountButton() async {
+    final haveAnAccountButton = find.text('Have an account? Sign in');
+    expect(haveAnAccountButton, findsOneWidget);
+    await tester.tap(haveAnAccountButton);
+    await tester.pump();
+  }
+
+  void expectSignInSubmitButton() {
+    final signInSubmitButton = find.text('Sign in');
+    expect(signInSubmitButton, findsOneWidget);
+  }
+
+  //AccountScreen
   Future<void> pumpAccountScreen({FakeAuthRepository? authRepository}) => tester.pumpWidget(
         ProviderScope(
           overrides: [
