@@ -44,10 +44,19 @@ class AuthRobot {
       );
 
   Future<void> tapEmailAndPasswordSubmitButton() async {
+    await _findAndTapEmailAndPasswordSubmitButton();
+    await tester.pump();
+  }
+
+  Future<void> tapEmailAndPasswordSubmitButtonAndSettle() async {
+    await _findAndTapEmailAndPasswordSubmitButton();
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> _findAndTapEmailAndPasswordSubmitButton() async {
     final primaryButton = find.byType(PrimaryButton);
     expect(primaryButton, findsOneWidget);
     await tester.tap(primaryButton);
-    await tester.pumpAndSettle();
   }
 
   Future<void> enterEmail(String email) async {
@@ -65,7 +74,7 @@ class AuthRobot {
   Future<void> signInWithEmailAndPassword() async {
     await enterEmail('test@test.com');
     await enterPassword('test12345');
-    await tapEmailAndPasswordSubmitButton();
+    await tapEmailAndPasswordSubmitButtonAndSettle();
   }
 
   Future<void> openAccountScreen() async {

@@ -5,3 +5,4 @@
 - Riverpod
 - Unit tests
 - Widget tests
+- Integration tests
