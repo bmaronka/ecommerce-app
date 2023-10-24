@@ -3,12 +3,17 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart'
-    as _i2;
+    as _i3;
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart'
-    as _i4;
+    as _i5;
+import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart'
+    as _i7;
+import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart'
+    as _i6;
+import 'package:ecommerce_app/src/features/cart/domain/cart.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -22,11 +27,21 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeCart_0 extends _i1.SmartFake implements _i2.Cart {
+  _FakeCart_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [FakeAuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFakeAuthRepository extends _i1.Mock
-    implements _i2.FakeAuthRepository {
+    implements _i3.FakeAuthRepository {
   MockFakeAuthRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -38,16 +53,16 @@ class MockFakeAuthRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i3.Stream<_i4.AppUser?> authStateChanges() => (super.noSuchMethod(
+  _i4.Stream<_i5.AppUser?> authStateChanges() => (super.noSuchMethod(
         Invocation.method(
           #authStateChanges,
           [],
         ),
-        returnValue: _i3.Stream<_i4.AppUser?>.empty(),
-      ) as _i3.Stream<_i4.AppUser?>);
+        returnValue: _i4.Stream<_i5.AppUser?>.empty(),
+      ) as _i4.Stream<_i5.AppUser?>);
 
   @override
-  _i3.Future<void> signInWithEmailAndPassword(
+  _i4.Future<void> signInWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -59,12 +74,12 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<void> createUserWithEmailAndPassword(
+  _i4.Future<void> createUserWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -76,19 +91,19 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i3.Future<void> signOut() => (super.noSuchMethod(
+  _i4.Future<void> signOut() => (super.noSuchMethod(
         Invocation.method(
           #signOut,
           [],
         ),
-        returnValue: _i3.Future<void>.value(),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
   void dispose() => super.noSuchMethod(
@@ -98,4 +113,99 @@ class MockFakeAuthRepository extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [RemoteCartRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockRemoteCartRepository extends _i1.Mock
+    implements _i6.RemoteCartRepository {
+  MockRemoteCartRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Cart> fetchCart(String? uid) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchCart,
+          [uid],
+        ),
+        returnValue: _i4.Future<_i2.Cart>.value(_FakeCart_0(
+          this,
+          Invocation.method(
+            #fetchCart,
+            [uid],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cart>);
+
+  @override
+  _i4.Stream<_i2.Cart> watchCart(String? uid) => (super.noSuchMethod(
+        Invocation.method(
+          #watchCart,
+          [uid],
+        ),
+        returnValue: _i4.Stream<_i2.Cart>.empty(),
+      ) as _i4.Stream<_i2.Cart>);
+
+  @override
+  _i4.Future<void> setCart(
+    String? uid,
+    _i2.Cart? cart,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #setCart,
+          [
+            uid,
+            cart,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
+/// A class which mocks [LocalCartRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockLocalCartRepository extends _i1.Mock
+    implements _i7.LocalCartRepository {
+  MockLocalCartRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<_i2.Cart> fetchCart() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchCart,
+          [],
+        ),
+        returnValue: _i4.Future<_i2.Cart>.value(_FakeCart_0(
+          this,
+          Invocation.method(
+            #fetchCart,
+            [],
+          ),
+        )),
+      ) as _i4.Future<_i2.Cart>);
+
+  @override
+  _i4.Stream<_i2.Cart> watchCart() => (super.noSuchMethod(
+        Invocation.method(
+          #watchCart,
+          [],
+        ),
+        returnValue: _i4.Stream<_i2.Cart>.empty(),
+      ) as _i4.Stream<_i2.Cart>);
+
+  @override
+  _i4.Future<void> setCart(_i2.Cart? cart) => (super.noSuchMethod(
+        Invocation.method(
+          #setCart,
+          [cart],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
