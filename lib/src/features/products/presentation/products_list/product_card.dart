@@ -5,8 +5,9 @@ import 'package:ecommerce_app/src/features/products/presentation/product_screen/
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductCard extends StatelessWidget {
+class ProductCard extends ConsumerWidget {
   const ProductCard({
     required this.product,
     this.onPressed,
@@ -18,10 +19,9 @@ class ProductCard extends StatelessWidget {
 
   static const productCardKey = Key('product-card');
 
-  // TODO: Inject formatter
   @override
-  Widget build(BuildContext context) {
-    final priceFormatted = kCurrencyFormatter.format(product.price);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final priceFormatted = ref.watch(currencyFormatterProvider).format(product.price);
 
     return Card(
       child: InkWell(

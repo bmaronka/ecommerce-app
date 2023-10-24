@@ -4,8 +4,9 @@ import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/product_reviews/product_rating_bar.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductReviewCard extends StatelessWidget {
+class ProductReviewCard extends ConsumerWidget {
   const ProductReviewCard(
     this.review, {
     super.key,
@@ -13,10 +14,9 @@ class ProductReviewCard extends StatelessWidget {
 
   final Review review;
 
-  // TODO: Inject date formatter
   @override
-  Widget build(BuildContext context) {
-    final dateFormatted = kDateFormatter.format(review.date);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dateFormatted = ref.watch(dateFormatterProvider).format(review.date);
 
     return Card(
       child: Padding(
@@ -31,13 +31,12 @@ class ProductReviewCard extends StatelessWidget {
                   initialRating: review.score,
                   ignoreGestures: true,
                   itemSize: 20,
-                  onRatingUpdate: (value) =>
-                      showNotImplementedAlertDialog(context: context), // TODO: Implement onRatingUpdate
+                  // TODO: Implement onRatingUpdate
+                  onRatingUpdate: (value) {
+                    showNotImplementedAlertDialog(context: context);
+                  },
                 ),
-                Text(
-                  dateFormatted,
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
+                Text(dateFormatted, style: Theme.of(context).textTheme.bodySmall),
               ],
             ),
             if (review.comment.isNotEmpty) ...[

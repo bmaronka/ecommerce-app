@@ -1,15 +1,16 @@
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CartTotalText extends StatelessWidget {
+class CartTotalText extends ConsumerWidget {
   const CartTotalText({super.key});
 
+  // TODO: Read from data source
   @override
-  Widget build(BuildContext context) {
-    // TODO: Read from data source
+  Widget build(BuildContext context, WidgetRef ref) {
     const cartTotal = 104.0;
-    // TODO: Inject formatter
-    final totalFormatted = kCurrencyFormatter.format(cartTotal);
+    final totalFormatted = ref.watch(currencyFormatterProvider).format(cartTotal);
+
     return Text(
       'Total: $totalFormatted',
       style: Theme.of(context).textTheme.headlineSmall,

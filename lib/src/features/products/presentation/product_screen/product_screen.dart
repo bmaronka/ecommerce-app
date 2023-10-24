@@ -52,17 +52,14 @@ class ProductScreen extends StatelessWidget {
       );
 }
 
-class ProductDetails extends StatelessWidget {
-  const ProductDetails({
-    required this.product,
-    super.key,
-  });
+class ProductDetails extends ConsumerWidget {
+  const ProductDetails({super.key, required this.product});
 
   final Product product;
 
   @override
-  Widget build(BuildContext context) {
-    final priceFormatted = kCurrencyFormatter.format(product.price);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final priceFormatted = ref.watch(currencyFormatterProvider).format(product.price);
 
     return ResponsiveTwoColumnLayout(
       startContent: Card(
@@ -78,7 +75,10 @@ class ProductDetails extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(product.title, style: Theme.of(context).textTheme.titleLarge),
+              Text(
+                product.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
               gapH8,
               Text(product.description),
               if (product.numRatings >= 1) ...[

@@ -7,6 +7,7 @@ import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
@@ -33,17 +34,14 @@ class OrderCard extends StatelessWidget {
       );
 }
 
-class OrderHeader extends StatelessWidget {
-  const OrderHeader({required this.order, super.key});
-
+class OrderHeader extends ConsumerWidget {
+  const OrderHeader({super.key, required this.order});
   final Order order;
 
-  // TODO: Inject currency formatter
-  // TODO: Inject date formatter
   @override
-  Widget build(BuildContext context) {
-    final totalFormatted = kCurrencyFormatter.format(order.total);
-    final dateFormatted = kDateFormatter.format(order.orderDate);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final totalFormatted = ref.watch(currencyFormatterProvider).format(order.total);
+    final dateFormatted = ref.watch(dateFormatterProvider).format(order.orderDate);
 
     return Container(
       color: Colors.grey[200],

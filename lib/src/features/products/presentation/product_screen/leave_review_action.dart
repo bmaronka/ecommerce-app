@@ -6,9 +6,10 @@ import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/router/router.dart';
 import 'package:ecommerce_app/src/utils/date_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class LeaveReviewAction extends StatelessWidget {
+class LeaveReviewAction extends ConsumerWidget {
   const LeaveReviewAction({
     required this.productId,
     super.key,
@@ -19,9 +20,9 @@ class LeaveReviewAction extends StatelessWidget {
   // TODO: Read from data source
   // TODO: Inject date formatter
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final purchase = Purchase(orderId: 'abc', orderDate: DateTime.now());
-    final dateFormatted = kDateFormatter.format(purchase.orderDate);
+    final dateFormatted = ref.watch(dateFormatterProvider).format(purchase.orderDate);
 
     return Column(
       children: [
