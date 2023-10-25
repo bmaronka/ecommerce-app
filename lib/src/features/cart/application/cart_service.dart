@@ -1,9 +1,13 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
+import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -81,3 +85,30 @@ final cartItemsCountProvider = Provider<int>(
         orElse: () => 0,
       ),
 );
+
+final cartTotalProvider = Provider.autoDispose<double>((ref) {
+  final cart = ref.watch(cartProvider).value ?? const Cart();
+  final productList = ref.watch(productsListStreamProvider).value ?? [];
+
+  if (cart.items.isNotEmpty && productList.isNotEmpty) {
+    return cart.items.entries
+        .map((item) => item.value * _findProductPrice(productList, item.key))
+        .reduce((value, element) => value + element);
+  }
+
+  return 0.0;
+});
+
+double _findProductPrice(List<Product> products, String productId) =>
+    products.firstWhereOrNull((product) => product.id == productId)?.price ?? 0.0;
+
+final itemAvailableQuantityProvider = Provider.autoDispose.family<int, Product>((ref, product) {
+  final cart = ref.watch(cartProvider).value;
+
+  if (cart != null) {
+    final quantity = cart.items[product.id] ?? 0;
+    return max(0, product.availableQuantity - quantity);
+  }
+
+  return product.availableQuantity;
+});

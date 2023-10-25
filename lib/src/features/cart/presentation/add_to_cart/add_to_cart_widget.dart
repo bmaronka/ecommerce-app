@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:ecommerce_app/src/common_widgets/item_quantity_selector.dart';
 import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
+import 'package:ecommerce_app/src/features/cart/application/cart_service.dart';
 import 'package:ecommerce_app/src/features/cart/presentation/add_to_cart/add_to_cart_controller.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
@@ -18,11 +19,9 @@ class AddToCartWidget extends ConsumerWidget {
 
   final Product product;
 
-  bool get _isOutOfStock => product.availableQuantity < 0;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final availableQuantity = product.availableQuantity;
+    final availableQuantity = ref.watch(itemAvailableQuantityProvider(product));
     final state = ref.watch(addToCartControllerProvider);
 
     ref.listen<AsyncValue<int>>(
@@ -52,10 +51,11 @@ class AddToCartWidget extends ConsumerWidget {
         gapH8,
         PrimaryButton(
           isLoading: state.isLoading,
-          onPressed: _isOutOfStock ? null : () => ref.read(addToCartControllerProvider.notifier).addItem(product.id),
-          text: _isOutOfStock ? 'Out of Stock'.hardcoded : 'Add to Cart'.hardcoded,
+          onPressed:
+              availableQuantity > 0 ? () => ref.read(addToCartControllerProvider.notifier).addItem(product.id) : null,
+          text: availableQuantity > 0 ? 'Add to Cart'.hardcoded : 'Out of Stock'.hardcoded,
         ),
-        if (!_isOutOfStock && availableQuantity == 0) ...[
+        if (product.availableQuantity > 0 && availableQuantity == 0) ...[
           gapH8,
           Text(
             'Already added to cart'.hardcoded,
