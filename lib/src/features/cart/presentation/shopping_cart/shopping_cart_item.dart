@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/item_quantity_selector.dart';
@@ -10,12 +9,13 @@ import 'package:ecommerce_app/src/common_widgets/responsive_two_column_layout.da
 import 'package:ecommerce_app/src/common_widgets/shimmer_effect_widget.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
+import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen_controller.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/currency_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
 class ShoppingCartItem extends ConsumerWidget {
   const ShoppingCartItem({
@@ -54,7 +54,7 @@ class ShoppingCartItem extends ConsumerWidget {
   }
 }
 
-class ShoppingCartItemContents extends StatelessWidget {
+class ShoppingCartItemContents extends ConsumerWidget {
   const ShoppingCartItemContents({
     required this.product,
     required this.item,
@@ -68,60 +68,87 @@ class ShoppingCartItemContents extends StatelessWidget {
   final int itemIndex;
   final bool isEditable;
 
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final priceFormatted = ref.watch(currencyFormatterProvider).format(product.price);
+
+    return ResponsiveTwoColumnLayout(
+      startFlex: 1,
+      endFlex: 2,
+      breakpoint: 320,
+      startContent: CustomImage(imageUrl: product.imageUrl),
+      spacing: Sizes.p24,
+      endContent: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(product.title, style: Theme.of(context).textTheme.headlineSmall),
+          gapH24,
+          Text(
+            priceFormatted,
+            style: Theme.of(context).textTheme.headlineSmall,
+          ),
+          gapH24,
+          isEditable
+              ? EditOrRemoveItemWidget(
+                  product: product,
+                  item: item,
+                  itemIndex: itemIndex,
+                )
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
+                  child: Text(
+                    'Quantity: ${item.quantity}'.hardcoded,
+                  ),
+                ),
+        ],
+      ),
+    );
+  }
+}
+
+class EditOrRemoveItemWidget extends ConsumerWidget {
+  const EditOrRemoveItemWidget({
+    required this.product,
+    required this.item,
+    required this.itemIndex,
+    super.key,
+  });
+
+  final Product product;
+  final Item item;
+  final int itemIndex;
+
   static Key deleteKey(int index) => Key('delete-$index');
 
-  // TODO: error handling
-  // TODO: Inject formatter
   @override
-  Widget build(BuildContext context) => ResponsiveTwoColumnLayout(
-        startFlex: 1,
-        endFlex: 2,
-        breakpoint: 320,
-        startContent: CustomImage(imageUrl: product.imageUrl),
-        spacing: Sizes.p24,
-        endContent: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(product.title, style: Theme.of(context).textTheme.headlineSmall),
-            gapH24,
-            Text(
-              NumberFormat.simpleCurrency().format(product.price),
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            gapH24,
-            isEditable
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ItemQuantitySelector(
-                        quantity: item.quantity,
-                        maxQuantity: min(product.availableQuantity, 10),
-                        itemIndex: itemIndex,
-                        // TODO: Implement onChanged
-                        onChanged: (value) {
-                          showNotImplementedAlertDialog(context: context);
-                        },
-                      ),
-                      IconButton(
-                        key: deleteKey(itemIndex),
-                        icon: Icon(Icons.delete, color: Colors.red[700]),
-                        // TODO: Implement onPressed
-                        onPressed: () {
-                          showNotImplementedAlertDialog(context: context);
-                        },
-                      ),
-                      const Spacer(),
-                    ],
-                  )
-                : Padding(
-                    padding: const EdgeInsets.symmetric(vertical: Sizes.p8),
-                    child: Text(
-                      'Quantity: ${item.quantity}'.hardcoded,
-                    ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(shoppingCartScreenControllerProvider);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ItemQuantitySelector(
+          quantity: item.quantity,
+          maxQuantity: min(product.availableQuantity, 10),
+          itemIndex: itemIndex,
+          onChanged: state.isLoading
+              ? null
+              : (quantity) => ref.read(shoppingCartScreenControllerProvider.notifier).updateItemQuantity(
+                    product.id,
+                    quantity,
                   ),
-          ],
         ),
-      );
+        IconButton(
+          key: deleteKey(itemIndex),
+          icon: Icon(Icons.delete, color: Colors.red[700]),
+          onPressed: state.isLoading
+              ? null
+              : () => ref.read(shoppingCartScreenControllerProvider.notifier).removeItemById(product.id),
+        ),
+        const Spacer(),
+      ],
+    );
+  }
 }
 
 class LoadingShoppingCartItem extends StatelessWidget {

@@ -1,17 +1,18 @@
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
+import 'package:ecommerce_app/src/features/cart/application/cart_service.dart';
 import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ShoppingCartIcon extends StatelessWidget {
+class ShoppingCartIcon extends ConsumerWidget {
   const ShoppingCartIcon({super.key});
 
   static const shoppingCartIconKey = Key('shopping-cart');
 
-  // TODO: Read from data source
   @override
-  Widget build(BuildContext context) {
-    const cartItemsCount = 3;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final cartItemsCount = ref.watch(cartItemsCountProvider);
 
     return Stack(
       children: [
@@ -23,7 +24,7 @@ class ShoppingCartIcon extends StatelessWidget {
           ),
         ),
         if (cartItemsCount > 0)
-          const Positioned(
+          Positioned(
             top: Sizes.p4,
             right: Sizes.p4,
             child: ShoppingCartIconBadge(itemsCount: cartItemsCount),
