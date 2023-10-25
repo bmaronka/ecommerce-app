@@ -14,7 +14,7 @@ class Cart {
       };
 
   factory Cart.fromMap(Map<String, dynamic> map) => Cart(
-        Map<ProductID, int>.from(map['items'] as Map<ProductID, int>),
+        Map<ProductID, int>.from(map['items'] as Map<ProductID, dynamic>),
       );
 
   String toJson() => json.encode(toMap());

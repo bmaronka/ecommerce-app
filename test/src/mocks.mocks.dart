@@ -3,17 +3,20 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i6;
 
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart'
     as _i3;
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart'
-    as _i5;
-import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart'
     as _i7;
+import 'package:ecommerce_app/src/features/cart/application/cart_service.dart'
+    as _i8;
+import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart'
+    as _i4;
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart'
-    as _i6;
+    as _i5;
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart' as _i2;
+import 'package:ecommerce_app/src/features/cart/domain/item.dart' as _i9;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -29,6 +32,39 @@ import 'package:mockito/mockito.dart' as _i1;
 
 class _FakeCart_0 extends _i1.SmartFake implements _i2.Cart {
   _FakeCart_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeFakeAuthRepository_1 extends _i1.SmartFake
+    implements _i3.FakeAuthRepository {
+  _FakeFakeAuthRepository_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeLocalCartRepository_2 extends _i1.SmartFake
+    implements _i4.LocalCartRepository {
+  _FakeLocalCartRepository_2(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeRemoteCartRepository_3 extends _i1.SmartFake
+    implements _i5.RemoteCartRepository {
+  _FakeRemoteCartRepository_3(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -53,16 +89,16 @@ class MockFakeAuthRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i4.Stream<_i5.AppUser?> authStateChanges() => (super.noSuchMethod(
+  _i6.Stream<_i7.AppUser?> authStateChanges() => (super.noSuchMethod(
         Invocation.method(
           #authStateChanges,
           [],
         ),
-        returnValue: _i4.Stream<_i5.AppUser?>.empty(),
-      ) as _i4.Stream<_i5.AppUser?>);
+        returnValue: _i6.Stream<_i7.AppUser?>.empty(),
+      ) as _i6.Stream<_i7.AppUser?>);
 
   @override
-  _i4.Future<void> signInWithEmailAndPassword(
+  _i6.Future<void> signInWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -74,12 +110,12 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 
   @override
-  _i4.Future<void> createUserWithEmailAndPassword(
+  _i6.Future<void> createUserWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -91,19 +127,19 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 
   @override
-  _i4.Future<void> signOut() => (super.noSuchMethod(
+  _i6.Future<void> signOut() => (super.noSuchMethod(
         Invocation.method(
           #signOut,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 
   @override
   void dispose() => super.noSuchMethod(
@@ -119,37 +155,37 @@ class MockFakeAuthRepository extends _i1.Mock
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockRemoteCartRepository extends _i1.Mock
-    implements _i6.RemoteCartRepository {
+    implements _i5.RemoteCartRepository {
   MockRemoteCartRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Cart> fetchCart(String? uid) => (super.noSuchMethod(
+  _i6.Future<_i2.Cart> fetchCart(String? uid) => (super.noSuchMethod(
         Invocation.method(
           #fetchCart,
           [uid],
         ),
-        returnValue: _i4.Future<_i2.Cart>.value(_FakeCart_0(
+        returnValue: _i6.Future<_i2.Cart>.value(_FakeCart_0(
           this,
           Invocation.method(
             #fetchCart,
             [uid],
           ),
         )),
-      ) as _i4.Future<_i2.Cart>);
+      ) as _i6.Future<_i2.Cart>);
 
   @override
-  _i4.Stream<_i2.Cart> watchCart(String? uid) => (super.noSuchMethod(
+  _i6.Stream<_i2.Cart> watchCart(String? uid) => (super.noSuchMethod(
         Invocation.method(
           #watchCart,
           [uid],
         ),
-        returnValue: _i4.Stream<_i2.Cart>.empty(),
-      ) as _i4.Stream<_i2.Cart>);
+        returnValue: _i6.Stream<_i2.Cart>.empty(),
+      ) as _i6.Stream<_i2.Cart>);
 
   @override
-  _i4.Future<void> setCart(
+  _i6.Future<void> setCart(
     String? uid,
     _i2.Cart? cart,
   ) =>
@@ -161,51 +197,117 @@ class MockRemoteCartRepository extends _i1.Mock
             cart,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }
 
 /// A class which mocks [LocalCartRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockLocalCartRepository extends _i1.Mock
-    implements _i7.LocalCartRepository {
+    implements _i4.LocalCartRepository {
   MockLocalCartRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<_i2.Cart> fetchCart() => (super.noSuchMethod(
+  _i6.Future<_i2.Cart> fetchCart() => (super.noSuchMethod(
         Invocation.method(
           #fetchCart,
           [],
         ),
-        returnValue: _i4.Future<_i2.Cart>.value(_FakeCart_0(
+        returnValue: _i6.Future<_i2.Cart>.value(_FakeCart_0(
           this,
           Invocation.method(
             #fetchCart,
             [],
           ),
         )),
-      ) as _i4.Future<_i2.Cart>);
+      ) as _i6.Future<_i2.Cart>);
 
   @override
-  _i4.Stream<_i2.Cart> watchCart() => (super.noSuchMethod(
+  _i6.Stream<_i2.Cart> watchCart() => (super.noSuchMethod(
         Invocation.method(
           #watchCart,
           [],
         ),
-        returnValue: _i4.Stream<_i2.Cart>.empty(),
-      ) as _i4.Stream<_i2.Cart>);
+        returnValue: _i6.Stream<_i2.Cart>.empty(),
+      ) as _i6.Stream<_i2.Cart>);
 
   @override
-  _i4.Future<void> setCart(_i2.Cart? cart) => (super.noSuchMethod(
+  _i6.Future<void> setCart(_i2.Cart? cart) => (super.noSuchMethod(
         Invocation.method(
           #setCart,
           [cart],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+}
+
+/// A class which mocks [CartService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCartService extends _i1.Mock implements _i8.CartService {
+  MockCartService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.FakeAuthRepository get authRepository => (super.noSuchMethod(
+        Invocation.getter(#authRepository),
+        returnValue: _FakeFakeAuthRepository_1(
+          this,
+          Invocation.getter(#authRepository),
+        ),
+      ) as _i3.FakeAuthRepository);
+
+  @override
+  _i4.LocalCartRepository get localCartRepository => (super.noSuchMethod(
+        Invocation.getter(#localCartRepository),
+        returnValue: _FakeLocalCartRepository_2(
+          this,
+          Invocation.getter(#localCartRepository),
+        ),
+      ) as _i4.LocalCartRepository);
+
+  @override
+  _i5.RemoteCartRepository get remoteCartRepository => (super.noSuchMethod(
+        Invocation.getter(#remoteCartRepository),
+        returnValue: _FakeRemoteCartRepository_3(
+          this,
+          Invocation.getter(#remoteCartRepository),
+        ),
+      ) as _i5.RemoteCartRepository);
+
+  @override
+  _i6.Future<void> setItem(_i9.Item? item) => (super.noSuchMethod(
+        Invocation.method(
+          #setItem,
+          [item],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> addItem(_i9.Item? item) => (super.noSuchMethod(
+        Invocation.method(
+          #addItem,
+          [item],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
+
+  @override
+  _i6.Future<void> removeItemById(String? productId) => (super.noSuchMethod(
+        Invocation.method(
+          #removeItemById,
+          [productId],
+        ),
+        returnValue: _i6.Future<void>.value(),
+        returnValueForMissingStub: _i6.Future<void>.value(),
+      ) as _i6.Future<void>);
 }
