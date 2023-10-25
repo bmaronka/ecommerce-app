@@ -15,7 +15,6 @@ void main() {
         products: Stream.value(kTestProducts),
       );
 
-      await container.read(cartProvider.future);
       await container.read(productsListStreamProvider.future);
       final total = container.read(cartTotalProvider);
 
