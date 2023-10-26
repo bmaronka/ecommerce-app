@@ -17,6 +17,10 @@ import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_reposito
     as _i5;
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart' as _i2;
 import 'package:ecommerce_app/src/features/cart/domain/item.dart' as _i9;
+import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart'
+    as _i10;
+import 'package:ecommerce_app/src/features/products/domain/product.dart'
+    as _i11;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -310,4 +314,62 @@ class MockCartService extends _i1.Mock implements _i8.CartService {
         returnValue: _i6.Future<void>.value(),
         returnValueForMissingStub: _i6.Future<void>.value(),
       ) as _i6.Future<void>);
+}
+
+/// A class which mocks [FakeProductsRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockFakeProductsRepository extends _i1.Mock
+    implements _i10.FakeProductsRepository {
+  MockFakeProductsRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  bool get addDelay => (super.noSuchMethod(
+        Invocation.getter(#addDelay),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  List<_i11.Product> getProductList() => (super.noSuchMethod(
+        Invocation.method(
+          #getProductList,
+          [],
+        ),
+        returnValue: <_i11.Product>[],
+      ) as List<_i11.Product>);
+
+  @override
+  _i11.Product? getProduct(String? id) => (super.noSuchMethod(Invocation.method(
+        #getProduct,
+        [id],
+      )) as _i11.Product?);
+
+  @override
+  _i6.Future<List<_i11.Product>> fetchProductList() => (super.noSuchMethod(
+        Invocation.method(
+          #fetchProductList,
+          [],
+        ),
+        returnValue: _i6.Future<List<_i11.Product>>.value(<_i11.Product>[]),
+      ) as _i6.Future<List<_i11.Product>>);
+
+  @override
+  _i6.Stream<List<_i11.Product>> watchProductList() => (super.noSuchMethod(
+        Invocation.method(
+          #watchProductList,
+          [],
+        ),
+        returnValue: _i6.Stream<List<_i11.Product>>.empty(),
+      ) as _i6.Stream<List<_i11.Product>>);
+
+  @override
+  _i6.Stream<_i11.Product?> watchProduct(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #watchProduct,
+          [id],
+        ),
+        returnValue: _i6.Stream<_i11.Product?>.empty(),
+      ) as _i6.Stream<_i11.Product?>);
 }
