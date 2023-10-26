@@ -15,6 +15,10 @@ class ItemQuantitySelector extends StatelessWidget {
   final int? itemIndex;
   final ValueChanged<int>? onChanged;
 
+  static Key decrementKey([int? index]) => index != null ? Key('decrement-$index') : const Key('decrement');
+  static Key quantityKey([int? index]) => index != null ? Key('quantity-$index') : const Key('quantity');
+  static Key incrementKey([int? index]) => index != null ? Key('increment-$index') : const Key('increment');
+
   @override
   Widget build(BuildContext context) => DecoratedBox(
         decoration: BoxDecoration(
@@ -29,18 +33,21 @@ class ItemQuantitySelector extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             IconButton(
+              key: decrementKey(itemIndex),
               icon: const Icon(Icons.remove),
               onPressed: onChanged != null && quantity > 1 ? () => onChanged!.call(quantity - 1) : null,
             ),
             SizedBox(
               width: 30.0,
               child: Text(
+                key: quantityKey(itemIndex),
                 '$quantity',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
             IconButton(
+              key: incrementKey(itemIndex),
               icon: const Icon(Icons.add),
               onPressed: onChanged != null && quantity < maxQuantity ? () => onChanged!.call(quantity + 1) : null,
             ),
