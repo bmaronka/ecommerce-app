@@ -72,6 +72,14 @@ void main() {
     },
   );
 
+  test('empty cart, throws', () async {
+    when(fakeAuthRepository.currentUser).thenReturn(testUser);
+    when(remoteCartRepository.fetchCart(testUser.uid)).thenAnswer((_) => Future.value(const Cart()));
+    final checkoutService = makeCheckoutService();
+
+    expect(checkoutService.placeOrder, throwsStateError);
+  });
+
   test(
     'non-empty cart, creates order',
     () async {

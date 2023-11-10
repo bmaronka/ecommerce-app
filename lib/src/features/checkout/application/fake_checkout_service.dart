@@ -4,6 +4,7 @@ import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeCheckoutService {
@@ -22,21 +23,26 @@ class FakeCheckoutService {
   Future<void> placeOrder() async {
     final uid = fakeAuthRepository.currentUser!.uid;
     final cart = await remoteCartRepository.fetchCart(uid);
-    final total = _totalPrice(cart);
 
-    final orderDate = DateTime(2023);
-    final orderId = orderDate.toIso8601String();
-    final order = Order(
-      id: orderId,
-      userId: uid,
-      items: cart.items,
-      orderStatus: OrderStatus.confirmed,
-      orderDate: orderDate,
-      total: total,
-    );
+    if (cart.items.isNotEmpty) {
+      final total = _totalPrice(cart);
 
-    await fakeOrdersRepository.addOrder(uid, order);
-    await remoteCartRepository.setCart(uid, const Cart());
+      final orderDate = DateTime(2023);
+      final orderId = orderDate.toIso8601String();
+      final order = Order(
+        id: orderId,
+        userId: uid,
+        items: cart.items,
+        orderStatus: OrderStatus.confirmed,
+        orderDate: orderDate,
+        total: total,
+      );
+
+      await fakeOrdersRepository.addOrder(uid, order);
+      await remoteCartRepository.setCart(uid, const Cart());
+    } else {
+      throw StateError('Can\'t place an order if the cart is empty'.hardcoded);
+    }
   }
 
   double _totalPrice(Cart cart) {

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:ecommerce_app/src/exceptions/error_logger.dart';
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
@@ -44,8 +45,8 @@ class CartSyncService {
         await remoteCartRepository.setCart(uid, updatedRemoteCart);
         await localCartRepository.setCart(const Cart());
       }
-    } catch (error) {
-      //TODO handle error
+    } catch (error, stackTrace) {
+      ref.read(errorLoggerProvider).logError(error, stackTrace);
     }
   }
 

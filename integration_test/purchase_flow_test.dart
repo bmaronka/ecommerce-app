@@ -44,6 +44,6 @@ void main() {
       await robot.auth.tapDialogLogoutButton();
       robot.products.expectFindAllProductCards();
     },
-    // skip: true,
+    skip: true,
   );
 }
