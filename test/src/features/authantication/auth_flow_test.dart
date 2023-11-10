@@ -10,14 +10,19 @@ void main() {
 
       await robot.pumpMyApp();
       robot.products.expectFindAllProductCards();
+
       await robot.openPopupMenu();
       await robot.auth.openEmailPasswordSignInScreen();
-      await robot.auth.signInWithEmailAndPassword();
+      await robot.auth.tapOnNeedAnAccountButton();
+      await robot.auth.enterAndSubmitEmailAndPassword();
+
       robot.products.expectFindAllProductCards();
+
       await robot.openPopupMenu();
       await robot.auth.openAccountScreen();
       await robot.auth.tapLogoutButton();
       await robot.auth.tapDialogLogoutButton();
+
       robot.products.expectFindAllProductCards();
     },
   );

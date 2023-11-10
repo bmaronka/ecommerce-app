@@ -15,7 +15,7 @@ void main() {
       await robot.checkout.startCheckout();
 
       robot.auth.expectEmailAndPasswordFieldsFound();
-      await robot.auth.signInWithEmailAndPassword();
+      await robot.auth.enterAndSubmitEmailAndPassword();
 
       robot.checkout.expectPayButtonFound();
     },
@@ -28,7 +28,8 @@ void main() {
 
       await robot.pumpMyApp();
       await robot.auth.openEmailPasswordSignInScreen();
-      await robot.auth.signInWithEmailAndPassword();
+      await robot.auth.tapOnNeedAnAccountButton();
+      await robot.auth.enterAndSubmitEmailAndPassword();
 
       await robot.products.selectProduct();
       await robot.cart.addToCart();

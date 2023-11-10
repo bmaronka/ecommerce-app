@@ -24,7 +24,7 @@ void main() {
       //checkout
       await robot.checkout.startCheckout();
       robot.auth.expectEmailAndPasswordFieldsFound();
-      await robot.auth.signInWithEmailAndPassword();
+      await robot.auth.enterAndSubmitEmailAndPassword();
       robot.cart.expectFindNCartItems(count: 1);
       await robot.checkout.startPayment();
 
@@ -44,6 +44,6 @@ void main() {
       await robot.auth.tapDialogLogoutButton();
       robot.products.expectFindAllProductCards();
     },
-    skip: true,
+    // skip: true,
   );
 }

@@ -17,29 +17,33 @@ void main() {
   test(
     'currentUser is null',
     () {
+      addTearDown(fakeAuthRepository.dispose);
+
       expect(fakeAuthRepository.currentUser, null);
       expect(fakeAuthRepository.authStateChanges(), emits(null));
     },
   );
 
   test(
-    'currentUser is non null after sign in',
+    'sign in throws when user not found',
     () async {
-      await fakeAuthRepository.signInWithEmailAndPassword(email, password);
-
       addTearDown(fakeAuthRepository.dispose);
 
-      expect(fakeAuthRepository.currentUser, user);
-      expect(fakeAuthRepository.authStateChanges(), emits(user));
+      await expectLater(
+        fakeAuthRepository.signInWithEmailAndPassword(email, password),
+        throwsA(isA<Exception>()),
+      );
+      expect(fakeAuthRepository.currentUser, null);
+      expect(fakeAuthRepository.authStateChanges(), emits(null));
     },
   );
 
   test(
     'currentUser is non null after registration',
     () async {
-      await fakeAuthRepository.createUserWithEmailAndPassword(email, password);
-
       addTearDown(fakeAuthRepository.dispose);
+
+      await fakeAuthRepository.createUserWithEmailAndPassword(email, password);
 
       expect(fakeAuthRepository.currentUser, user);
       expect(fakeAuthRepository.authStateChanges(), emits(user));
@@ -49,11 +53,14 @@ void main() {
   test(
     'currentUser is null after sign out',
     () async {
-      await fakeAuthRepository.signInWithEmailAndPassword(email, password);
+      addTearDown(fakeAuthRepository.dispose);
+
+      await fakeAuthRepository.createUserWithEmailAndPassword(
+        email,
+        password,
+      );
       expect(fakeAuthRepository.currentUser, user);
       expect(fakeAuthRepository.authStateChanges(), emits(user));
-
-      addTearDown(fakeAuthRepository.dispose);
 
       await fakeAuthRepository.signOut();
       expect(fakeAuthRepository.currentUser, null);
@@ -62,10 +69,13 @@ void main() {
   );
 
   test(
-    'sign in after dispose throws an exception',
+    'create user after dispose throws exception',
     () {
       fakeAuthRepository.dispose();
-      expect(() => fakeAuthRepository.signInWithEmailAndPassword(email, password), throwsStateError);
+      expect(
+        fakeAuthRepository.createUserWithEmailAndPassword(email, password),
+        throwsStateError,
+      );
     },
   );
 }
