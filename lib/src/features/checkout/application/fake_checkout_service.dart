@@ -24,7 +24,7 @@ class FakeCheckoutService {
     final cart = await remoteCartRepository.fetchCart(uid);
     final total = _totalPrice(cart);
 
-    final orderDate = DateTime.now();
+    final orderDate = DateTime(2023);
     final orderId = orderDate.toIso8601String();
     final order = Order(
       id: orderId,

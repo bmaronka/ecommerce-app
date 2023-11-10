@@ -11,22 +11,30 @@ void main() {
       await robot.pumpMyApp();
       robot.products.expectFindAllProductCards();
 
+      //add to cart
       await robot.products.selectProduct();
       await robot.products.setProductQuantity(quantity: 3);
       await robot.cart.addToCart();
       await robot.cart.openCart();
       robot.cart.expectItemQuantity(quantity: 3, atIndex: 0);
-      await robot.closePage();
 
-      await robot.openPopupMenu();
-      await robot.auth.openEmailPasswordSignInScreen();
+      //checkout
+      await robot.checkout.startCheckout();
+      robot.auth.expectEmailAndPasswordFieldsFound();
       await robot.auth.signInWithEmailAndPassword();
-      robot.products.expectFindAllProductCards();
-
-      await robot.cart.openCart();
       robot.cart.expectFindNCartItems(count: 1);
+      await robot.checkout.startPayment();
+
+      //orders are plcaed
+      robot.orders.expectNOrderItems();
       await robot.closePage();
 
+      //cart is empty
+      await robot.cart.openCart();
+      robot.cart.expectEmptyShoppingCart();
+      await robot.closePage();
+
+      //logout
       await robot.openPopupMenu();
       await robot.auth.openAccountScreen();
       await robot.auth.tapLogoutButton();

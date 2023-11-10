@@ -128,6 +128,13 @@ class AuthRobot {
     expect(signInSubmitButton, findsOneWidget);
   }
 
+  void expectEmailAndPasswordFieldsFound() {
+    final emailField = find.byKey(EmailPasswordSignInScreen.emailKey);
+    expect(emailField, findsOneWidget);
+    final passwordField = find.byKey(EmailPasswordSignInScreen.passwordKey);
+    expect(passwordField, findsOneWidget);
+  }
+
   //AccountScreen
   Future<void> pumpAccountScreen({FakeAuthRepository? authRepository}) => tester.pumpWidget(
         ProviderScope(

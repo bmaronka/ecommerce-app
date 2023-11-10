@@ -14,6 +14,8 @@ import 'package:go_router/go_router.dart';
 
 import 'features/authantication/auth_robot.dart';
 import 'features/cart/cart_robot.dart';
+import 'features/checkout/checkout_robot.dart';
+import 'features/orders/orders_robot.dart';
 import 'features/products/products_robot.dart';
 import 'goldens/golden_robot.dart';
 
@@ -22,13 +24,17 @@ class Robot {
       : auth = AuthRobot(tester),
         cart = CartRobot(tester),
         products = ProductsRobot(tester),
-        golden = GoldenRobot(tester);
+        golden = GoldenRobot(tester),
+        checkout = CheckoutRobot(tester),
+        orders = OrdersRobot(tester);
 
   final WidgetTester tester;
   final AuthRobot auth;
   final CartRobot cart;
   final ProductsRobot products;
   final GoldenRobot golden;
+  final CheckoutRobot checkout;
+  final OrdersRobot orders;
 
   Future<void> pumpMyApp() async {
     final productsRepository = FakeProductsRepository(addDelay: false);
