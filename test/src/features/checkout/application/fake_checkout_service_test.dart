@@ -7,6 +7,7 @@ import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.da
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:ecommerce_app/src/utils/current_date_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -20,8 +21,8 @@ void main() {
   late FakeProductsRepository fakeProductsRepository;
 
   const testUser = AppUser(uid: 'abc');
-  final orderDate = DateTime(2023);
-  final orderId = orderDate.toIso8601String();
+  final testDate = DateTime(2022, 7, 13);
+  final orderId = testDate.toIso8601String();
   final testOrder = Order(
     id: orderId,
     userId: testUser.uid,
@@ -29,7 +30,7 @@ void main() {
       '1': 1,
     },
     orderStatus: OrderStatus.confirmed,
-    orderDate: orderDate,
+    orderDate: testDate,
     total: 1.0,
   );
   const testProduct = Product(
@@ -55,6 +56,7 @@ void main() {
         remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
         ordersRepositoryProvider.overrideWithValue(fakeOrdersRepository),
         productsRepositoryProvider.overrideWithValue(fakeProductsRepository),
+        currentDateBuilderProvider.overrideWithValue(() => testDate),
       ],
     );
     addTearDown(container.dispose);

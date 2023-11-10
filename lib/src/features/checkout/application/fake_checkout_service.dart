@@ -5,6 +5,7 @@ import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.da
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/current_date_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeCheckoutService {
@@ -13,12 +14,14 @@ class FakeCheckoutService {
     required this.remoteCartRepository,
     required this.fakeOrdersRepository,
     required this.fakeProductsRepository,
+    required this.dateBuilder,
   });
 
   final FakeAuthRepository fakeAuthRepository;
   final RemoteCartRepository remoteCartRepository;
   final FakeOrdersRepository fakeOrdersRepository;
   final FakeProductsRepository fakeProductsRepository;
+  final DateTime Function() dateBuilder;
 
   Future<void> placeOrder() async {
     final uid = fakeAuthRepository.currentUser!.uid;
@@ -27,7 +30,7 @@ class FakeCheckoutService {
     if (cart.items.isNotEmpty) {
       final total = _totalPrice(cart);
 
-      final orderDate = DateTime(2023);
+      final orderDate = dateBuilder();
       final orderId = orderDate.toIso8601String();
       final order = Order(
         id: orderId,
@@ -64,5 +67,6 @@ final checkoutServiceProvider = Provider<FakeCheckoutService>(
     remoteCartRepository: ref.read(remoteCartRepositoryProvider),
     fakeOrdersRepository: ref.read(ordersRepositoryProvider),
     fakeProductsRepository: ref.read(productsRepositoryProvider),
+    dateBuilder: ref.read(currentDateBuilderProvider),
   ),
 );
