@@ -19,10 +19,7 @@ class FakeProductsRepository {
 
   Product? getProduct(String id) => _getProduct(_products.value, id);
 
-  Future<List<Product>> fetchProductList() async {
-    await delay(addDelay);
-    return Future.value(_products.value);
-  }
+  Future<List<Product>> fetchProductList() async => Future.value(_products.value);
 
   Stream<List<Product>> watchProductList() => _products.stream;
 
@@ -41,6 +38,16 @@ class FakeProductsRepository {
     }
 
     _products.value = products;
+  }
+
+  Future<List<Product>> searchProducts(String query) async {
+    assert(
+      _products.value.length <= 100,
+      'Client-side search should only be performed if the number of products is small',
+    );
+
+    final productList = await fetchProductList();
+    return productList.where((product) => product.title.toLowerCase().contains(query.toLowerCase())).toList();
   }
 
   static Product? _getProduct(List<Product> products, String id) =>
@@ -62,4 +69,13 @@ final productsListFutureProvider = FutureProvider.autoDispose<List<Product>>((re
 final productStreamProvider = StreamProvider.autoDispose.family<Product?, String>((ref, id) {
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.watchProduct(id);
+});
+
+final productListSearchProvider = FutureProvider.autoDispose.family<List<Product>, String>((ref, query) async {
+  final link = ref.keepAlive();
+  Timer(
+    const Duration(seconds: 5),
+    link.close,
+  );
+  return ref.watch(productsRepositoryProvider).searchProducts(query);
 });
