@@ -4,35 +4,50 @@ import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
+import 'package:ecommerce_app/src/utils/in_memory_store.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FakeProductsRepository {
-  const FakeProductsRepository({
+  FakeProductsRepository({
     this.addDelay = true,
   });
 
   final bool addDelay;
-  final List<Product> _products = kTestProducts;
+  final _products = InMemoryStore<List<Product>>(List.from(kTestProducts));
 
-  List<Product> getProductList() => _products;
+  List<Product> getProductList() => _products.value;
 
-  Product? getProduct(String id) => _products.firstWhereOrNull((product) => product.id == id);
+  Product? getProduct(String id) => _getProduct(_products.value, id);
 
   Future<List<Product>> fetchProductList() async {
     await delay(addDelay);
-    return _products;
+    return Future.value(_products.value);
   }
 
-  Stream<List<Product>> watchProductList() async* {
+  Stream<List<Product>> watchProductList() => _products.stream;
+
+  Stream<Product?> watchProduct(String id) => watchProductList().map((products) => _getProduct(products, id));
+
+  Future<void> setProduct(Product product) async {
     await delay(addDelay);
-    yield _products;
+
+    final products = _products.value;
+    final index = products.indexWhere((p) => p.id == product.id);
+
+    if (index == -1) {
+      products.add(product);
+    } else {
+      products[index] = product;
+    }
+
+    _products.value = products;
   }
 
-  Stream<Product?> watchProduct(String id) =>
-      watchProductList().map((products) => products.firstWhereOrNull((product) => product.id == id));
+  static Product? _getProduct(List<Product> products, String id) =>
+      products.firstWhereOrNull((product) => product.id == id);
 }
 
-final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) => const FakeProductsRepository());
+final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) => FakeProductsRepository());
 
 final productsListStreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
   final productsRepository = ref.watch(productsRepositoryProvider);

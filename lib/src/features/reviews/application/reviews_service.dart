@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
@@ -9,10 +12,12 @@ class ReviewsService {
   const ReviewsService({
     required this.fakeAuthRepository,
     required this.fakeReviewsRepository,
+    required this.fakeProductsRepository,
   });
 
   final FakeAuthRepository fakeAuthRepository;
   final FakeReviewsRepository fakeReviewsRepository;
+  final FakeProductsRepository fakeProductsRepository;
 
   Future<void> submitReview({
     required ProductID productId,
@@ -30,6 +35,38 @@ class ReviewsService {
       uid: user.uid,
       review: review,
     );
+    unawaited(_updateProductRating(productId));
+  }
+
+  Future<void> _updateProductRating(ProductID productId) async {
+    final reviews = await fakeReviewsRepository.fetchReviews(productId);
+    final avgRating = _avgReviewScore(reviews);
+    final product = fakeProductsRepository.getProduct(productId);
+
+    if (product == null) {
+      throw StateError('Product not found with id: $productId.'.hardcoded);
+    }
+
+    final updated = product.copyWith(
+      avgRating: avgRating,
+      numRatings: reviews.length,
+    );
+
+    await fakeProductsRepository.setProduct(updated);
+  }
+
+  double _avgReviewScore(List<Review> reviews) {
+    if (reviews.isNotEmpty) {
+      double total = 0.0;
+
+      for (final review in reviews) {
+        total += review.rating;
+      }
+
+      return total / reviews.length;
+    }
+
+    return 0.0;
   }
 }
 
@@ -37,6 +74,7 @@ final reviewsServiceProvider = Provider<ReviewsService>(
   (ref) => ReviewsService(
     fakeAuthRepository: ref.watch(authRepositoryProvider),
     fakeReviewsRepository: ref.watch(reviewsRepositoryProvider),
+    fakeProductsRepository: ref.watch(productsRepositoryProvider),
   ),
 );
 

@@ -1,24 +1,13 @@
+import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/responsive_center.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/constants/breakpoints.dart';
-import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
+import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/product_reviews/product_review_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final reviews = <Review>[
-  Review(
-    date: DateTime(2022, 2, 12),
-    rating: 4.5,
-    comment: 'Great product, would buy again!',
-  ),
-  Review(
-    date: DateTime(2022, 2, 10),
-    rating: 4.0,
-    comment: 'Looks great but the packaging was damaged.',
-  ),
-];
-
-class ProductReviewsList extends StatelessWidget {
+class ProductReviewsList extends ConsumerWidget {
   const ProductReviewsList({
     required this.productId,
     super.key,
@@ -26,9 +15,13 @@ class ProductReviewsList extends StatelessWidget {
 
   final String productId;
 
-  // TODO: Read from data source
   @override
-  Widget build(BuildContext context) => SliverList(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final reviewsValue = ref.watch(productReviewsProvider(productId));
+
+    return AsyncValueSliverWidget(
+      value: reviewsValue,
+      data: (reviews) => SliverList(
         delegate: SliverChildBuilderDelegate(
           (BuildContext context, int index) => ResponsiveCenter(
             maxContentWidth: Breakpoint.tablet,
@@ -37,5 +30,7 @@ class ProductReviewsList extends StatelessWidget {
           ),
           childCount: reviews.length,
         ),
-      );
+      ),
+    );
+  }
 }
