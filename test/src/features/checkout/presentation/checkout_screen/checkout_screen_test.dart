@@ -8,16 +8,18 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      await robot.checkout.startCheckout();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        await robot.checkout.startCheckout();
 
-      robot.auth.expectEmailAndPasswordFieldsFound();
-      await robot.auth.enterAndSubmitEmailAndPassword();
+        robot.auth.expectEmailAndPasswordFieldsFound();
+        await robot.auth.enterAndSubmitEmailAndPassword();
 
-      robot.checkout.expectPayButtonFound();
+        robot.checkout.expectPayButtonFound();
+      });
     },
   );
 
@@ -26,17 +28,19 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.auth.openEmailPasswordSignInScreen();
-      await robot.auth.tapOnNeedAnAccountButton();
-      await robot.auth.enterAndSubmitEmailAndPassword();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.auth.openEmailPasswordSignInScreen();
+        await robot.auth.tapOnNeedAnAccountButton();
+        await robot.auth.enterAndSubmitEmailAndPassword();
 
-      await robot.products.selectProduct();
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      await robot.checkout.startCheckout();
+        await robot.products.selectProduct();
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        await robot.checkout.startCheckout();
 
-      robot.checkout.expectPayButtonFound();
+        robot.checkout.expectPayButtonFound();
+      });
     },
   );
 }

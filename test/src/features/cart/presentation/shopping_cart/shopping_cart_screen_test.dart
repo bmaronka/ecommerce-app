@@ -8,10 +8,12 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      robot.products.expectFindNProductCards(14);
-      await robot.cart.openCart();
-      robot.cart.expectEmptyShoppingCart();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        robot.products.expectFindNProductCards(14);
+        await robot.cart.openCart();
+        robot.cart.expectEmptyShoppingCart();
+      });
     },
   );
 
@@ -20,12 +22,14 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      robot.cart.expectItemQuantity(quantity: 1, atIndex: 0);
-      robot.cart.expectShoppingCartTotalIs('Total: \$15.00');
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        robot.cart.expectItemQuantity(quantity: 1, atIndex: 0);
+        robot.cart.expectShoppingCartTotalIs('Total: \$15.00');
+      });
     },
   );
 
@@ -34,13 +38,15 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 5);
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
-      robot.cart.expectShoppingCartTotalIs('Total: \$75.00');
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 5);
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
+        robot.cart.expectShoppingCartTotalIs('Total: \$75.00');
+      });
     },
   );
 
@@ -49,13 +55,15 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 6);
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
-      robot.cart.expectShoppingCartTotalIs('Total: \$75.00');
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 6);
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
+        robot.cart.expectShoppingCartTotalIs('Total: \$75.00');
+      });
     },
   );
 
@@ -64,14 +72,16 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 2);
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      await robot.cart.incrementQuantity(quantity: 2, atIndex: 0);
-      robot.cart.expectItemQuantity(quantity: 4, atIndex: 0);
-      robot.cart.expectShoppingCartTotalIs('Total: \$60.00');
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 2);
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        await robot.cart.incrementQuantity(quantity: 2, atIndex: 0);
+        robot.cart.expectItemQuantity(quantity: 4, atIndex: 0);
+        robot.cart.expectShoppingCartTotalIs('Total: \$60.00');
+      });
     },
   );
 
@@ -80,14 +90,16 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 5);
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      await robot.cart.decrementQuantity(quantity: 2, atIndex: 0);
-      robot.cart.expectItemQuantity(quantity: 3, atIndex: 0);
-      robot.cart.expectShoppingCartTotalIs('Total: \$45.00');
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 5);
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        await robot.cart.decrementQuantity(quantity: 2, atIndex: 0);
+        robot.cart.expectItemQuantity(quantity: 3, atIndex: 0);
+        robot.cart.expectShoppingCartTotalIs('Total: \$45.00');
+      });
     },
   );
 
@@ -96,22 +108,24 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
 
-      //1
-      await robot.products.selectProduct();
-      await robot.cart.addToCart();
-      await robot.goBack();
+        //1
+        await robot.products.selectProduct();
+        await robot.cart.addToCart();
+        await robot.goBack();
 
-      //2
-      await robot.products.selectProduct(atIndex: 1);
-      await robot.cart.addToCart();
+        //2
+        await robot.products.selectProduct(atIndex: 1);
+        await robot.cart.addToCart();
 
-      await robot.cart.openCart();
-      robot.cart.expectItemQuantity(quantity: 1, atIndex: 0);
-      robot.cart.expectItemQuantity(quantity: 1, atIndex: 1);
-      robot.cart.expectFindNCartItems(count: 2);
-      robot.cart.expectShoppingCartTotalIs('Total: \$28.00');
+        await robot.cart.openCart();
+        robot.cart.expectItemQuantity(quantity: 1, atIndex: 0);
+        robot.cart.expectItemQuantity(quantity: 1, atIndex: 1);
+        robot.cart.expectFindNCartItems(count: 2);
+        robot.cart.expectShoppingCartTotalIs('Total: \$28.00');
+      });
     },
   );
 
@@ -120,13 +134,15 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.cart.addToCart();
-      await robot.cart.openCart();
-      await robot.cart.deleteProductAtIndex(atIndex: 0);
-      robot.cart.expectFindNCartItems(count: 0);
-      robot.cart.expectEmptyShoppingCart();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.cart.addToCart();
+        await robot.cart.openCart();
+        await robot.cart.deleteProductAtIndex(atIndex: 0);
+        robot.cart.expectFindNCartItems(count: 0);
+        robot.cart.expectEmptyShoppingCart();
+      });
     },
   );
 
@@ -135,11 +151,13 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 5);
-      await robot.cart.addToCart();
-      robot.cart.expectItemOutOfStock();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 5);
+        await robot.cart.addToCart();
+        robot.cart.expectItemOutOfStock();
+      });
     },
   );
 
@@ -148,14 +166,16 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
-      await robot.products.selectProduct();
-      await robot.products.setProductQuantity(quantity: 5);
-      await robot.cart.addToCart();
-      robot.cart.expectItemOutOfStock();
-      await robot.goBack();
-      await robot.products.selectProduct();
-      robot.cart.expectItemOutOfStock();
+      await tester.runAsync(() async {
+        await robot.pumpMyApp();
+        await robot.products.selectProduct();
+        await robot.products.setProductQuantity(quantity: 5);
+        await robot.cart.addToCart();
+        robot.cart.expectItemOutOfStock();
+        await robot.goBack();
+        await robot.products.selectProduct();
+        robot.cart.expectItemOutOfStock();
+      });
     },
   );
 }
