@@ -17,6 +17,7 @@ import 'features/cart/cart_robot.dart';
 import 'features/checkout/checkout_robot.dart';
 import 'features/orders/orders_robot.dart';
 import 'features/products/products_robot.dart';
+import 'features/reviews/reviews_robot.dart';
 import 'goldens/golden_robot.dart';
 
 class Robot {
@@ -26,7 +27,8 @@ class Robot {
         products = ProductsRobot(tester),
         golden = GoldenRobot(tester),
         checkout = CheckoutRobot(tester),
-        orders = OrdersRobot(tester);
+        orders = OrdersRobot(tester),
+        reviews = ReviewsRobot(tester);
 
   final WidgetTester tester;
   final AuthRobot auth;
@@ -35,6 +37,7 @@ class Robot {
   final GoldenRobot golden;
   final CheckoutRobot checkout;
   final OrdersRobot orders;
+  final ReviewsRobot reviews;
 
   Future<void> pumpMyApp() async {
     final productsRepository = FakeProductsRepository(addDelay: false);

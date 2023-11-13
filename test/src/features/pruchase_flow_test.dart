@@ -4,7 +4,11 @@ import '../robot.dart';
 
 void main() {
   testWidgets(
-    'Full purchase, sign in and sign out flow, with products remaning in cart after sign in',
+    '''Full purchase;
+       sign in and sign out flow;  
+       products remaning in cart after sign in;
+       leaving review;
+    ''',
     (tester) async {
       final robot = Robot(tester);
 
@@ -33,6 +37,14 @@ void main() {
       await robot.cart.openCart();
       robot.cart.expectEmptyShoppingCart();
       await robot.closePage();
+
+      //leave review
+      await robot.products.selectProduct();
+      robot.reviews.expectFindLeaveReview();
+      await robot.reviews.tapLeaveReview();
+      await robot.reviews.createAndSubmitReview('Love it!');
+      robot.reviews.expectOneReviewFound();
+      robot.reviews.expectFindText('Love it!');
 
       //logout
       await robot.openPopupMenu();
