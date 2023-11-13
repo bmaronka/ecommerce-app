@@ -425,6 +425,16 @@ class MockFakeProductsRepository extends _i1.Mock
         ),
         returnValue: _i9.Stream<_i13.Product?>.empty(),
       ) as _i9.Stream<_i13.Product?>);
+
+  @override
+  _i9.Future<void> setProduct(_i13.Product? product) => (super.noSuchMethod(
+        Invocation.method(
+          #setProduct,
+          [product],
+        ),
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [FakeOrdersRepository].
@@ -443,11 +453,15 @@ class MockFakeOrdersRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i9.Stream<List<_i14.Order>> watchUserOrders(String? uid) =>
+  _i9.Stream<List<_i14.Order>> watchUserOrders(
+    String? uid, {
+    String? productId,
+  }) =>
       (super.noSuchMethod(
         Invocation.method(
           #watchUserOrders,
           [uid],
+          {#productId: productId},
         ),
         returnValue: _i9.Stream<List<_i14.Order>>.empty(),
       ) as _i9.Stream<List<_i14.Order>>);
@@ -646,6 +660,15 @@ class MockReviewsService extends _i1.Mock implements _i17.ReviewsService {
           Invocation.getter(#fakeReviewsRepository),
         ),
       ) as _i8.FakeReviewsRepository);
+
+  @override
+  _i7.FakeProductsRepository get fakeProductsRepository => (super.noSuchMethod(
+        Invocation.getter(#fakeProductsRepository),
+        returnValue: _FakeFakeProductsRepository_5(
+          this,
+          Invocation.getter(#fakeProductsRepository),
+        ),
+      ) as _i7.FakeProductsRepository);
 
   @override
   _i9.Future<void> submitReview({
