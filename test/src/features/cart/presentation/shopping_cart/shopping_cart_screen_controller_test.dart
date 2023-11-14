@@ -5,72 +5,90 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
-  late CartService cartService;
+  late MockCartService cartService;
 
-  late ShoppingCartScreenController shoppingCartScreenController;
-
+  const productId = '1';
   final exception = Exception('Connection failure');
-  const testItem = Item(
-    productId: '123',
-    quantity: 3,
-  );
 
-  setUp(() {
-    cartService = MockCartService();
-    shoppingCartScreenController = ShoppingCartScreenController(cartService: cartService);
-  });
+  setUp(() => cartService = MockCartService());
 
-  test(
-    'initial state is AsyncData(1)',
-    () {
-      expect(shoppingCartScreenController.state, AsyncData<void>(null));
-    },
-  );
+  ProviderContainer makeProviderContainer() {
+    final container = ProviderContainer(
+      overrides: [
+        cartServiceProvider.overrideWithValue(cartService),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    return container;
+  }
 
   group(
     'updateItemQuantity',
     () {
       test(
-        'success',
+        'update quantity, success',
         () async {
-          when(cartService.setItem(testItem)).thenAnswer((_) => Future.value());
-
-          expect(
-            shoppingCartScreenController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              AsyncData<void>(null),
-            ]),
+          const item = Item(
+            productId: productId,
+            quantity: 3,
+          );
+          when(cartService.setItem(item)).thenAnswer((_) => Future.value(null));
+          final container = makeProviderContainer();
+          final controller = container.read(shoppingCartScreenControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            shoppingCartScreenControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await shoppingCartScreenController.updateItemQuantity(testItem.productId, testItem.quantity);
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(cartService.setItem(testItem)).called(1);
+          await controller.updateItemQuantity(productId, 3);
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), data),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(cartService.setItem(item)).called(1);
         },
       );
 
       test(
-        'failure',
+        'update quantity, failure',
         () async {
-          when(cartService.setItem(testItem)).thenThrow(exception);
-
-          expect(
-            shoppingCartScreenController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              predicate<AsyncValue<void>>((value) {
-                expect(value.hasError, true);
-                return true;
-              }),
-            ]),
+          const item = Item(
+            productId: productId,
+            quantity: 3,
+          );
+          when(cartService.setItem(item)).thenThrow(exception);
+          final container = makeProviderContainer();
+          final controller = container.read(shoppingCartScreenControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            shoppingCartScreenControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await shoppingCartScreenController.updateItemQuantity(testItem.productId, testItem.quantity);
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(cartService.setItem(testItem)).called(1);
+          await controller.updateItemQuantity(productId, 3);
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(cartService.setItem(item)).called(1);
         },
       );
     },
@@ -80,43 +98,56 @@ void main() {
     'removeItemById',
     () {
       test(
-        'success',
+        'remove item, success',
         () async {
-          when(cartService.removeItemById(testItem.productId)).thenAnswer((_) => Future.value());
-
-          expect(
-            shoppingCartScreenController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              AsyncData<void>(null),
-            ]),
+          when(cartService.removeItemById(productId)).thenAnswer((_) => Future.value(null));
+          final container = makeProviderContainer();
+          final controller = container.read(shoppingCartScreenControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            shoppingCartScreenControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await shoppingCartScreenController.removeItemById(testItem.productId);
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(cartService.removeItemById(testItem.productId)).called(1);
+          await controller.removeItemById(productId);
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), data),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(cartService.removeItemById(productId)).called(1);
         },
       );
 
       test(
-        'failure',
+        'remove item, failure',
         () async {
-          when(cartService.removeItemById(testItem.productId)).thenThrow(exception);
-
-          expect(
-            shoppingCartScreenController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              predicate<AsyncValue<void>>((value) {
-                expect(value.hasError, true);
-                return true;
-              }),
-            ]),
+          when(cartService.removeItemById(productId)).thenThrow(exception);
+          final container = makeProviderContainer();
+          final controller = container.read(shoppingCartScreenControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            shoppingCartScreenControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await shoppingCartScreenController.removeItemById(testItem.productId);
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(cartService.removeItemById(testItem.productId)).called(1);
+          await controller.removeItemById(productId);
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(cartService.removeItemById(productId)).called(1);
         },
       );
     },

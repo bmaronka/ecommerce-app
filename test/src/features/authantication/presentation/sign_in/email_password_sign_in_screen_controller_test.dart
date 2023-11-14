@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
@@ -35,18 +36,18 @@ void main() {
         'sign in success',
         () async {
           final container = makeProviderContainer();
-          final controller = container.read(emailPasswordSignInControllerProvider.notifier);
-
+          final listener = Listener();
+          container.listen(
+            emailPasswordSignInScreenControllerProvider,
+            listener,
+            fireImmediately: true,
+          );
           when(fakeAuthRepository.signInWithEmailAndPassword(email, password)).thenAnswer((_) => Future.value());
 
-          expect(
-            controller.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              const AsyncData<void>(null),
-            ]),
-          );
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
+          final controller = container.read(emailPasswordSignInScreenControllerProvider.notifier);
           final result = await controller.submit(
             email: email,
             password: password,
@@ -54,6 +55,11 @@ void main() {
           );
 
           expect(result, true);
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), data),
+          ]);
+          verifyNoMoreInteractions(listener);
           verify(fakeAuthRepository.signInWithEmailAndPassword(email, password)).called(1);
         },
       );
@@ -62,21 +68,18 @@ void main() {
         'sign in failure',
         () async {
           final container = makeProviderContainer();
-          final controller = container.read(emailPasswordSignInControllerProvider.notifier);
-
+          final listener = Listener();
+          container.listen(
+            emailPasswordSignInScreenControllerProvider,
+            listener,
+            fireImmediately: true,
+          );
           when(fakeAuthRepository.signInWithEmailAndPassword(email, password)).thenThrow(exception);
 
-          expect(
-            controller.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              predicate<AsyncValue<void>>((state) {
-                expect(state.hasError, true);
-                return true;
-              }),
-            ]),
-          );
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
+          final controller = container.read(emailPasswordSignInScreenControllerProvider.notifier);
           final result = await controller.submit(
             email: email,
             password: password,
@@ -84,6 +87,11 @@ void main() {
           );
 
           expect(result, false);
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
+          ]);
+          verifyNoMoreInteractions(listener);
           verify(fakeAuthRepository.signInWithEmailAndPassword(email, password)).called(1);
         },
       );

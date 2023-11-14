@@ -5,42 +5,67 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
   late FakeAuthRepository fakeAuthRepository;
 
-  late AccountScreenController accountScreenController;
-
   final exception = Exception('Connection failure');
 
-  setUp(() {
-    fakeAuthRepository = MockFakeAuthRepository();
-    accountScreenController = AccountScreenController(fakeAuthRepository);
-  });
+  setUp(() => fakeAuthRepository = MockFakeAuthRepository());
+
+  ProviderContainer makeProviderContainer() {
+    final container = ProviderContainer(
+      overrides: [
+        authRepositoryProvider.overrideWithValue(fakeAuthRepository),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    return container;
+  }
 
   test(
     'initial state is AsyncValue.data',
     () {
-      expect(accountScreenController.state, AsyncData<void>(null));
+      final container = makeProviderContainer();
+      final listener = Listener<AsyncValue<void>>();
+      container.listen(
+        accountScreenControllerProvider,
+        listener,
+        fireImmediately: true,
+      );
+
+      verify(listener(null, AsyncData<void>(null)));
+      verifyNoMoreInteractions(listener);
+      verifyNever(fakeAuthRepository.signOut());
     },
   );
 
   test(
     'signOut success',
     () async {
+      final container = makeProviderContainer();
+      final listener = Listener();
+      container.listen(
+        accountScreenControllerProvider,
+        listener,
+        fireImmediately: true,
+      );
       when(fakeAuthRepository.signOut()).thenAnswer((_) => Future.value());
 
-      expect(
-        accountScreenController.stream,
-        emitsInOrder([
-          const AsyncLoading<void>(),
-          const AsyncData<void>(null),
-        ]),
-      );
+      const data = AsyncData<void>(null);
+      verify(listener(null, data));
 
-      await accountScreenController.signOut();
+      final controller = container.read(accountScreenControllerProvider.notifier);
+      await controller.signOut();
 
+      verifyInOrder([
+        listener(data, argThat(isA<AsyncLoading>())),
+        listener(argThat(isA<AsyncLoading>()), data),
+      ]);
+      verifyNoMoreInteractions(listener);
       verify(fakeAuthRepository.signOut()).called(1);
     },
   );
@@ -48,21 +73,26 @@ void main() {
   test(
     'signOut failure',
     () async {
+      final container = makeProviderContainer();
+      final listener = Listener();
+      container.listen(
+        accountScreenControllerProvider,
+        listener,
+        fireImmediately: true,
+      );
       when(fakeAuthRepository.signOut()).thenThrow(exception);
 
-      expect(
-        accountScreenController.stream,
-        emitsInOrder([
-          const AsyncLoading<void>(),
-          predicate<AsyncValue<void>>((value) {
-            expect(value.hasError, true);
-            return true;
-          }),
-        ]),
-      );
+      const data = AsyncData<void>(null);
+      verify(listener(null, data));
 
-      await accountScreenController.signOut();
+      final controller = container.read(accountScreenControllerProvider.notifier);
+      await controller.signOut();
 
+      verifyInOrder([
+        listener(data, argThat(isA<AsyncLoading>())),
+        listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
+      ]);
+      verifyNoMoreInteractions(listener);
       verify(fakeAuthRepository.signOut()).called(1);
     },
   );

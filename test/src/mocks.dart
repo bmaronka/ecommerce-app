@@ -8,9 +8,14 @@ import 'package:ecommerce_app/src/features/products/data/fake_products_repositor
 import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
 
 // ignore: unused_import
 import 'mocks.mocks.dart';
+
+class Listener<T> extends Mock {
+  void call(T? previous, T next);
+}
 
 @GenerateMocks([
   FakeAuthRepository,

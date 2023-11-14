@@ -5,41 +5,47 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
   late CartService cartService;
 
-  late AddToCartController addToCartController;
-
   final exception = Exception('Connection failure');
   const testItem = Item(
     productId: '1',
-    quantity: 1,
+    quantity: 2,
   );
 
-  setUp(() {
-    cartService = MockCartService();
-    addToCartController = AddToCartController(cartService: cartService);
-  });
+  setUp(() => cartService = MockCartService());
+
+  ProviderContainer makeProviderContainer() {
+    final container = ProviderContainer(
+      overrides: [
+        cartServiceProvider.overrideWithValue(cartService),
+      ],
+    );
+    addTearDown(container.dispose);
+
+    return container;
+  }
 
   test(
     'initial state is AsyncData(1)',
     () {
-      expect(addToCartController.state, AsyncData<int>(1));
-    },
-  );
+      final container = makeProviderContainer();
+      final listener = Listener();
+      container.listen(
+        addToCartControllerProvider,
+        listener,
+        fireImmediately: true,
+      );
 
-  test(
-    '''
-      Given state is AsyncData(1)
-      When updateQuantity with value 2
-      Then state is AsyncData(2)
-    ''',
-    () {
-      expect(addToCartController.state, AsyncData<int>(1));
-      addToCartController.updateQuantity(2);
-      expect(addToCartController.state, AsyncData<int>(2));
+      verify(listener(null, AsyncData<int>(1)));
+      verifyNoMoreInteractions(listener);
+      verifyNever(cartService.addItem(testItem));
+      verifyNever(cartService.setItem(testItem));
+      verifyNever(cartService.removeItemById(testItem.productId));
     },
   );
 
@@ -49,18 +55,36 @@ void main() {
       test(
         'success',
         () async {
+          final container = makeProviderContainer();
+          final listener = Listener();
+          container.listen(
+            addToCartControllerProvider,
+            listener,
+            fireImmediately: true,
+          );
           when(cartService.addItem(testItem)).thenAnswer((_) => Future.value());
 
-          expect(
-            addToCartController.stream,
-            emitsInOrder([
-              const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(1)),
-              const AsyncData<int>(1),
-            ]),
+          const initialData = AsyncData<int>(1);
+          verify(listener(null, initialData));
+
+          final controller = container.read(addToCartControllerProvider.notifier);
+          controller.updateQuantity(2);
+          verify(listener(initialData, const AsyncData<int>(2)));
+
+          await controller.addItem(testItem.productId);
+          verifyInOrder(
+            [
+              listener(
+                const AsyncData<int>(2),
+                const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(2)),
+              ),
+              listener(
+                const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(2)),
+                initialData,
+              ),
+            ],
           );
-
-          await addToCartController.addItem(testItem.productId);
-
+          verifyNoMoreInteractions(listener);
           verify(cartService.addItem(testItem)).called(1);
         },
       );
@@ -68,21 +92,36 @@ void main() {
       test(
         'failure',
         () async {
+          final container = makeProviderContainer();
+          final listener = Listener();
+          container.listen(
+            addToCartControllerProvider,
+            listener,
+            fireImmediately: true,
+          );
           when(cartService.addItem(testItem)).thenThrow(exception);
 
-          expect(
-            addToCartController.stream,
-            emitsInOrder([
-              const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(1)),
-              predicate<AsyncValue<int>>((value) {
-                expect(value.hasError, true);
-                return true;
-              }),
-            ]),
+          const initialData = AsyncData<int>(1);
+          verify(listener(null, initialData));
+
+          final controller = container.read(addToCartControllerProvider.notifier);
+          controller.updateQuantity(2);
+          verify(listener(initialData, const AsyncData<int>(2)));
+
+          await controller.addItem(testItem.productId);
+          verifyInOrder(
+            [
+              listener(
+                const AsyncData<int>(2),
+                const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(2)),
+              ),
+              listener(
+                const AsyncLoading<int>().copyWithPrevious(const AsyncData<int>(2)),
+                argThat(isA<AsyncError>()),
+              ),
+            ],
           );
-
-          await addToCartController.addItem(testItem.productId);
-
+          verifyNoMoreInteractions(listener);
           verify(cartService.addItem(testItem)).called(1);
         },
       );

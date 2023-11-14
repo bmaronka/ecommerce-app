@@ -4,27 +4,26 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
-  late FakeCheckoutService fakeCheckoutService;
-  late PaymentButtonController paymentButtonController;
+  late MockFakeCheckoutService checkoutService;
+
+  setUp(() => checkoutService = MockFakeCheckoutService());
 
   final exception = Exception('Connection failure');
 
-  setUp(() {
-    fakeCheckoutService = MockFakeCheckoutService();
-    paymentButtonController = PaymentButtonController(
-      checkoutService: fakeCheckoutService,
+  ProviderContainer makeProviderContainer() {
+    final container = ProviderContainer(
+      overrides: [
+        checkoutServiceProvider.overrideWithValue(checkoutService),
+      ],
     );
-  });
+    addTearDown(container.dispose);
 
-  test(
-    'initial state is AsyncData(1)',
-    () {
-      expect(paymentButtonController.state, AsyncData<void>(null));
-    },
-  );
+    return container;
+  }
 
   group(
     'pay',
@@ -32,41 +31,54 @@ void main() {
       test(
         'success',
         () async {
-          when(fakeCheckoutService.placeOrder()).thenAnswer((_) => Future.value());
-
-          expect(
-            paymentButtonController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              AsyncData<void>(null),
-            ]),
+          when(checkoutService.placeOrder()).thenAnswer((_) => Future.value(null));
+          final container = makeProviderContainer();
+          final controller = container.read(paymentButtonControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            paymentButtonControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await paymentButtonController.pay();
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(fakeCheckoutService.placeOrder()).called(1);
+          await controller.pay();
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), data),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(checkoutService.placeOrder()).called(1);
         },
       );
 
       test(
         'failure',
         () async {
-          when(fakeCheckoutService.placeOrder()).thenThrow(exception);
-
-          expect(
-            paymentButtonController.stream,
-            emitsInOrder([
-              const AsyncLoading<void>(),
-              predicate<AsyncValue<void>>((value) {
-                expect(value.hasError, true);
-                return true;
-              }),
-            ]),
+          when(checkoutService.placeOrder()).thenThrow(exception);
+          final container = makeProviderContainer();
+          final controller = container.read(paymentButtonControllerProvider.notifier);
+          final listener = Listener();
+          container.listen(
+            paymentButtonControllerProvider,
+            listener,
+            fireImmediately: true,
           );
 
-          await paymentButtonController.pay();
+          const data = AsyncData<void>(null);
+          verify(listener(null, data));
 
-          verify(fakeCheckoutService.placeOrder()).called(1);
+          await controller.pay();
+
+          verifyInOrder([
+            listener(data, argThat(isA<AsyncLoading>())),
+            listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
+          ]);
+          verifyNoMoreInteractions(listener);
+          verify(checkoutService.placeOrder()).called(1);
         },
       );
     },
