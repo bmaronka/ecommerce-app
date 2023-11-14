@@ -1,3 +1,6 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final currentDateBuilderProvider = Provider<DateTime Function()>((ref) => DateTime.now);
+part 'current_date_provider.g.dart';
+
+@riverpod
+DateTime Function() currentDateBuilder(CurrentDateBuilderRef ref) => DateTime.now;

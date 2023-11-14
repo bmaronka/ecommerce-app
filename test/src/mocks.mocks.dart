@@ -435,6 +435,16 @@ class MockFakeProductsRepository extends _i1.Mock
         returnValue: _i9.Future<void>.value(),
         returnValueForMissingStub: _i9.Future<void>.value(),
       ) as _i9.Future<void>);
+
+  @override
+  _i9.Future<List<_i13.Product>> searchProducts(String? query) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #searchProducts,
+          [query],
+        ),
+        returnValue: _i9.Future<List<_i13.Product>>.value(<_i13.Product>[]),
+      ) as _i9.Future<List<_i13.Product>>);
 }
 
 /// A class which mocks [FakeOrdersRepository].

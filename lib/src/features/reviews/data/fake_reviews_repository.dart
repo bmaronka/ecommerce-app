@@ -2,7 +2,9 @@ import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'fake_reviews_repository.g.dart';
 
 class FakeReviewsRepository {
   FakeReviewsRepository({this.addDelay = true});
@@ -53,7 +55,9 @@ class FakeReviewsRepository {
   }
 }
 
-final reviewsRepositoryProvider = Provider<FakeReviewsRepository>((ref) => FakeReviewsRepository());
+@Riverpod(keepAlive: true)
+FakeReviewsRepository reviewsRepository(ReviewsRepositoryRef ref) => FakeReviewsRepository();
 
-final productReviewsProvider = StreamProvider.autoDispose
-    .family<List<Review>, ProductID>((ref, productId) => ref.watch(reviewsRepositoryProvider).watchReviews(productId));
+@riverpod
+Stream<List<Review>> productReviews(ProductReviewsRef ref, ProductID productId) =>
+    ref.watch(reviewsRepositoryProvider).watchReviews(productId);

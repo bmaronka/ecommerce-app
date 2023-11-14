@@ -11,6 +11,9 @@ import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'cart_sync_service.g.dart';
 
 class CartSyncService {
   CartSyncService(this.ref) {
@@ -79,4 +82,5 @@ class CartSyncService {
   }
 }
 
-final cartSyncServiceProvider = Provider<CartSyncService>(CartSyncService.new);
+@Riverpod(keepAlive: true)
+CartSyncService cartSyncService(CartSyncServiceRef ref) => CartSyncService(ref);

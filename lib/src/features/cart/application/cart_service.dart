@@ -9,7 +9,9 @@ import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'cart_service.g.dart';
 
 class CartService {
   const CartService({
@@ -61,15 +63,15 @@ class CartService {
   }
 }
 
-final cartServiceProvider = Provider<CartService>(
-  (ref) => CartService(
-    authRepository: ref.watch(authRepositoryProvider),
-    localCartRepository: ref.watch(localCartRepositoryProvider),
-    remoteCartRepository: ref.watch(remoteCartRepositoryProvider),
-  ),
-);
+@Riverpod(keepAlive: true)
+CartService cartService(CartServiceRef ref) => CartService(
+      authRepository: ref.watch(authRepositoryProvider),
+      localCartRepository: ref.watch(localCartRepositoryProvider),
+      remoteCartRepository: ref.watch(remoteCartRepositoryProvider),
+    );
 
-final cartProvider = StreamProvider<Cart>((ref) {
+@Riverpod(keepAlive: true)
+Stream<Cart> cart(CartRef ref) {
   final user = ref.watch(authStateChangesProvider).value;
 
   if (user != null) {
@@ -77,16 +79,16 @@ final cartProvider = StreamProvider<Cart>((ref) {
   }
 
   return ref.watch(localCartRepositoryProvider).watchCart();
-});
+}
 
-final cartItemsCountProvider = Provider<int>(
-  (ref) => ref.watch(cartProvider).maybeWhen(
-        data: (cart) => cart.items.length,
-        orElse: () => 0,
-      ),
-);
+@Riverpod(keepAlive: true)
+int cartItemsCount(CartItemsCountRef ref) => ref.watch(cartProvider).maybeWhen(
+      data: (cart) => cart.items.length,
+      orElse: () => 0,
+    );
 
-final cartTotalProvider = Provider.autoDispose<double>((ref) {
+@riverpod
+double cartTotal(CartTotalRef ref) {
   final cart = ref.watch(cartProvider).value ?? const Cart();
   final productList = ref.watch(productsListStreamProvider).value ?? [];
 
@@ -97,12 +99,13 @@ final cartTotalProvider = Provider.autoDispose<double>((ref) {
   }
 
   return 0.0;
-});
+}
 
 double _findProductPrice(List<Product> products, String productId) =>
     products.firstWhereOrNull((product) => product.id == productId)?.price ?? 0.0;
 
-final itemAvailableQuantityProvider = Provider.autoDispose.family<int, Product>((ref, product) {
+@riverpod
+int itemAvailableQuantity(ItemAvailableQuantityRef ref, Product product) {
   final cart = ref.watch(cartProvider).value;
 
   if (cart != null) {
@@ -111,4 +114,4 @@ final itemAvailableQuantityProvider = Provider.autoDispose.family<int, Product>(
   }
 
   return product.availableQuantity;
-});
+}

@@ -5,7 +5,9 @@ import 'package:ecommerce_app/src/constants/test_products.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'fake_products_repository.g.dart';
 
 class FakeProductsRepository {
   FakeProductsRepository({
@@ -54,28 +56,34 @@ class FakeProductsRepository {
       products.firstWhereOrNull((product) => product.id == id);
 }
 
-final productsRepositoryProvider = Provider<FakeProductsRepository>((ref) => FakeProductsRepository());
+@Riverpod(keepAlive: true)
+FakeProductsRepository productsRepository(ProductsRepositoryRef ref) => FakeProductsRepository();
 
-final productsListStreamProvider = StreamProvider.autoDispose<List<Product>>((ref) {
+@riverpod
+Stream<List<Product>> productsListStream(ProductsListStreamRef ref) {
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.watchProductList();
-});
+}
 
-final productsListFutureProvider = FutureProvider.autoDispose<List<Product>>((ref) {
+@riverpod
+Future<List<Product>> productsListFuture(ProductsListFutureRef ref) {
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.fetchProductList();
-});
+}
 
-final productStreamProvider = StreamProvider.autoDispose.family<Product?, String>((ref, id) {
+@riverpod
+Stream<Product?> productStream(ProductStreamRef ref, ProductID id) {
   final productsRepository = ref.watch(productsRepositoryProvider);
   return productsRepository.watchProduct(id);
-});
+}
 
-final productListSearchProvider = FutureProvider.autoDispose.family<List<Product>, String>((ref, query) async {
+@riverpod
+Future<List<Product>> productListSearch(ProductListSearchRef ref, String query) async {
   final link = ref.keepAlive();
   Timer(
     const Duration(seconds: 5),
     link.close,
   );
+
   return ref.watch(productsRepositoryProvider).searchProducts(query);
-});
+}

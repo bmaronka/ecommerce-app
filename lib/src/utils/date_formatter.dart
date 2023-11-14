@@ -1,4 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final dateFormatterProvider = Provider<DateFormat>((ref) => DateFormat.MMMEd());
+part 'date_formatter.g.dart';
+
+@riverpod
+DateFormat dateFormatter(DateFormatterRef ref) => DateFormat.MMMEd();

@@ -1,4 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final currencyFormatterProvider = Provider<NumberFormat>((ref) => NumberFormat.simpleCurrency(locale: 'en_US'));
+part 'currency_formatter.g.dart';
+
+@riverpod
+NumberFormat currencyFormatter(CurrencyFormatterRef ref) => NumberFormat.simpleCurrency(locale: 'en_US');

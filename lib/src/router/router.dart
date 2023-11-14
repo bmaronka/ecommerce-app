@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_form_type.dart';
@@ -13,8 +11,10 @@ import 'package:ecommerce_app/src/features/reviews/presentation/leave_review_scr
 import 'package:ecommerce_app/src/router/go_router_refresh_stream.dart';
 import 'package:ecommerce_app/src/router/not_found_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'router.g.dart';
 
 enum AppRoute {
   home,
@@ -27,11 +27,12 @@ enum AppRoute {
   signIn,
 }
 
-final goRouterProvider = Provider<GoRouter>((ref) {
+@Riverpod(keepAlive: true)
+GoRouter goRouter(GoRouterRef ref) {
   final authRepo = ref.watch(authRepositoryProvider);
 
   return _buildRouter(authRepo);
-});
+}
 
 GoRouter _buildRouter(FakeAuthRepository authRepository) => GoRouter(
       initialLocation: '/',

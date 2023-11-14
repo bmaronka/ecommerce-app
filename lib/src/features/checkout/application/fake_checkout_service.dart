@@ -6,7 +6,9 @@ import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/current_date_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'fake_checkout_service.g.dart';
 
 class FakeCheckoutService {
   FakeCheckoutService({
@@ -61,12 +63,11 @@ class FakeCheckoutService {
   }
 }
 
-final checkoutServiceProvider = Provider<FakeCheckoutService>(
-  (ref) => FakeCheckoutService(
-    fakeAuthRepository: ref.read(authRepositoryProvider),
-    remoteCartRepository: ref.read(remoteCartRepositoryProvider),
-    fakeOrdersRepository: ref.read(ordersRepositoryProvider),
-    fakeProductsRepository: ref.read(productsRepositoryProvider),
-    dateBuilder: ref.read(currentDateBuilderProvider),
-  ),
-);
+@riverpod
+FakeCheckoutService checkoutService(CheckoutServiceRef ref) => FakeCheckoutService(
+      fakeAuthRepository: ref.read(authRepositoryProvider),
+      remoteCartRepository: ref.read(remoteCartRepositoryProvider),
+      fakeOrdersRepository: ref.read(ordersRepositoryProvider),
+      fakeProductsRepository: ref.read(productsRepositoryProvider),
+      dateBuilder: ref.read(currentDateBuilderProvider),
+    );

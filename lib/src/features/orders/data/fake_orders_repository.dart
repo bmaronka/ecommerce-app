@@ -2,7 +2,9 @@ import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'fake_orders_repository.g.dart';
 
 class FakeOrdersRepository {
   FakeOrdersRepository({this.addDelay = true});
@@ -33,4 +35,5 @@ class FakeOrdersRepository {
   }
 }
 
-final ordersRepositoryProvider = Provider<FakeOrdersRepository>((ref) => FakeOrdersRepository());
+@Riverpod(keepAlive: true)
+FakeOrdersRepository ordersRepository(OrdersRepositoryRef ref) => FakeOrdersRepository();
