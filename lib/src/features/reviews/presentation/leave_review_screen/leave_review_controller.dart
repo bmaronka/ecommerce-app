@@ -2,16 +2,21 @@ import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/utils/current_date_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
-  LeaveReviewController({
-    required this.reviewsService,
-    required this.currentDateBuilder,
-  }) : super(AsyncData(null));
+part 'leave_review_controller.g.dart';
 
-  final ReviewsService reviewsService;
-  final DateTime Function() currentDateBuilder;
+@riverpod
+class LeaveReviewController extends _$LeaveReviewController {
+  final initial = Object();
+  late var current = initial;
+  // An [Object] instance is equal to itself only.
+  bool get mounted => current == initial;
+
+  @override
+  FutureOr<void> build() {
+    ref.onDispose(() => current = Object());
+  }
 
   Future<void> submitReview({
     Review? previousReview,
@@ -29,9 +34,11 @@ class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
     final review = Review(
       rating: rating,
       comment: comment,
-      date: currentDateBuilder(),
+      date: ref.read(currentDateBuilderProvider).call(),
     );
-    final newState = await AsyncValue.guard(() => reviewsService.submitReview(productId: productId, review: review));
+    final newState = await AsyncValue.guard(
+      () => ref.read(reviewsServiceProvider).submitReview(productId: productId, review: review),
+    );
 
     if (mounted) {
       state = newState;
@@ -42,10 +49,3 @@ class LeaveReviewController extends StateNotifier<AsyncValue<void>> {
     }
   }
 }
-
-final leaveReviewControllerProvider = StateNotifierProvider.autoDispose<LeaveReviewController, AsyncValue<void>>(
-  (ref) => LeaveReviewController(
-    reviewsService: ref.watch(reviewsServiceProvider),
-    currentDateBuilder: ref.watch(currentDateBuilderProvider),
-  ),
-);

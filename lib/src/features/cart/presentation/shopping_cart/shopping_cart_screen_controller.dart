@@ -1,29 +1,25 @@
+import 'dart:async';
+
 import 'package:ecommerce_app/src/features/cart/application/cart_service.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class ShoppingCartScreenController extends StateNotifier<AsyncValue<void>> {
-  ShoppingCartScreenController({
-    required this.cartService,
-  }) : super(AsyncData(null));
+part 'shopping_cart_screen_controller.g.dart';
 
-  final CartService cartService;
+@riverpod
+class ShoppingCartScreenController extends _$ShoppingCartScreenController {
+  @override
+  FutureOr<void> build() {}
 
   Future<void> updateItemQuantity(ProductID productId, int quantity) async {
     state = const AsyncLoading();
     final updated = Item(productId: productId, quantity: quantity);
-    state = await AsyncValue.guard(() => cartService.setItem(updated));
+    state = await AsyncValue.guard(() => ref.read(cartServiceProvider).setItem(updated));
   }
 
   Future<void> removeItemById(ProductID productId) async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(() => cartService.removeItemById(productId));
+    state = await AsyncValue.guard(() => ref.watch(cartServiceProvider).removeItemById(productId));
   }
 }
-
-final shoppingCartScreenControllerProvider = StateNotifierProvider<ShoppingCartScreenController, AsyncValue<void>>(
-  (ref) => ShoppingCartScreenController(
-    cartService: ref.watch(cartServiceProvider),
-  ),
-);

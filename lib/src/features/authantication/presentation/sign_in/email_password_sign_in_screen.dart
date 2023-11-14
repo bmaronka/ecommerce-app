@@ -71,7 +71,7 @@ class _EmailPasswordSignInContentsState extends ConsumerState<EmailPasswordSignI
     setState(() => _submitted = true);
 
     if (_formKey.currentState!.validate()) {
-      final success = await ref.read(emailPasswordSignInControllerProvider.notifier).submit(
+      final success = await ref.read(emailPasswordSignInScreenControllerProvider.notifier).submit(
             email: email,
             password: password,
             formType: _formType,
@@ -105,10 +105,10 @@ class _EmailPasswordSignInContentsState extends ConsumerState<EmailPasswordSignI
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue>(
-      emailPasswordSignInControllerProvider,
+      emailPasswordSignInScreenControllerProvider,
       (_, state) => state.showAlertDialogOnError(context),
     );
-    final state = ref.watch(emailPasswordSignInControllerProvider);
+    final state = ref.watch(emailPasswordSignInScreenControllerProvider);
 
     return ResponsiveScrollableCard(
       child: FocusScope(

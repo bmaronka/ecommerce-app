@@ -1,11 +1,13 @@
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_form_type.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class EmailPasswordSignInScreenController extends StateNotifier<AsyncValue<void>> {
-  EmailPasswordSignInScreenController({required this.fakeAuthRepository}) : super(const AsyncData<void>(null));
+part 'email_password_sign_in_screen_controller.g.dart';
 
-  final FakeAuthRepository fakeAuthRepository;
+@riverpod
+class EmailPasswordSignInScreenController extends _$EmailPasswordSignInScreenController {
+  @override
+  FutureOr<void> build() {}
 
   Future<bool> submit({
     required String email,
@@ -20,16 +22,12 @@ class EmailPasswordSignInScreenController extends StateNotifier<AsyncValue<void>
   }
 
   Future<void> _authenticate(String email, String password, EmailPasswordSignInFormType formType) {
+    final authRepository = ref.read(authRepositoryProvider);
     switch (formType) {
       case EmailPasswordSignInFormType.signIn:
-        return fakeAuthRepository.signInWithEmailAndPassword(email, password);
+        return authRepository.signInWithEmailAndPassword(email, password);
       case EmailPasswordSignInFormType.register:
-        return fakeAuthRepository.createUserWithEmailAndPassword(email, password);
+        return authRepository.createUserWithEmailAndPassword(email, password);
     }
   }
 }
-
-final emailPasswordSignInControllerProvider =
-    StateNotifierProvider.autoDispose<EmailPasswordSignInScreenController, AsyncValue<void>>(
-  (ref) => EmailPasswordSignInScreenController(fakeAuthRepository: ref.watch(authRepositoryProvider)),
-);
