@@ -9,7 +9,7 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
         await robot.cart.addToCart();
         await robot.cart.openCart();
@@ -29,7 +29,7 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.auth.openEmailPasswordSignInScreen();
         await robot.auth.tapOnNeedAnAccountButton();
         await robot.auth.enterAndSubmitEmailAndPassword();

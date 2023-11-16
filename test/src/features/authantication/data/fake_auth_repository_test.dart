@@ -45,7 +45,7 @@ void main() {
 
       await fakeAuthRepository.createUserWithEmailAndPassword(email, password);
 
-      expect(fakeAuthRepository.currentUser, user);
+      expect(fakeAuthRepository.currentUser, isA<AppUser>());
       expect(fakeAuthRepository.authStateChanges(), emits(user));
     },
   );

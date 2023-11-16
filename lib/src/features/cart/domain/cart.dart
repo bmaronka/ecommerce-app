@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:flutter/foundation.dart';
+import 'package:equatable/equatable.dart';
 
-class Cart {
+class Cart extends Equatable {
   const Cart([this.items = const {}]);
 
   final Map<ProductID, int> items;
@@ -25,14 +25,9 @@ class Cart {
   String toString() => 'Cart(items: $items)';
 
   @override
-  bool operator ==(covariant Cart other) {
-    if (identical(this, other)) return true;
-
-    return mapEquals(other.items, items);
-  }
-
-  @override
-  int get hashCode => items.hashCode;
+  List<Object?> get props => [
+        items,
+      ];
 }
 
 extension CartItems on Cart {

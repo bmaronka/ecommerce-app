@@ -21,15 +21,18 @@ void main() {
       await robot.golden.setSurfaceSize(currentSize);
       await robot.golden.loadRobotoFont();
       await robot.golden.loadMaterialIconFont();
-      await robot.pumpMyApp();
+      await robot.pumpMyAppWithFakes();
       await robot.golden.precacheImages();
       await expectLater(
         find.byType(MyApp),
-        matchesGoldenFile('products_list_${currentSize.width.toInt()}x${currentSize.height.toInt()}.png'),
+        matchesGoldenFile(
+          'products_list_${currentSize.width.toInt()}x${currentSize.height.toInt()}.png',
+        ),
       );
     },
     variant: sizeVariant,
     tags: ['golden'],
     skip: true,
   );
+  ;
 }

@@ -8,10 +8,10 @@ import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'reviews_service.g.dart';
+part 'fake_reviews_service.g.dart';
 
-class ReviewsService {
-  const ReviewsService({
+class FakeReviewsService {
+  const FakeReviewsService({
     required this.fakeAuthRepository,
     required this.fakeReviewsRepository,
     required this.fakeProductsRepository,
@@ -73,7 +73,7 @@ class ReviewsService {
 }
 
 @Riverpod(keepAlive: true)
-ReviewsService reviewsService(ReviewsServiceRef ref) => ReviewsService(
+FakeReviewsService reviewsService(ReviewsServiceRef ref) => FakeReviewsService(
       fakeAuthRepository: ref.watch(authRepositoryProvider),
       fakeReviewsRepository: ref.watch(reviewsRepositoryProvider),
       fakeProductsRepository: ref.watch(productsRepositoryProvider),

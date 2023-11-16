@@ -7,3 +7,4 @@
 - Widget tests
 - Integration tests
 - Golden tests
+- Firebase Auth

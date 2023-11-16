@@ -9,8 +9,8 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
-        robot.products.expectFindNProductCards(14);
+        await robot.pumpMyAppWithFakes();
+        robot.products.expectProductsListLoaded();
         await robot.cart.openCart();
         robot.cart.expectEmptyShoppingCart();
       });
@@ -23,7 +23,7 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
         await robot.cart.addToCart();
         await robot.cart.openCart();
@@ -39,9 +39,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 5);
+        await robot.products.setProductQuantity(5);
         await robot.cart.addToCart();
         await robot.cart.openCart();
         robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
@@ -56,9 +56,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 6);
+        await robot.products.setProductQuantity(6);
         await robot.cart.addToCart();
         await robot.cart.openCart();
         robot.cart.expectItemQuantity(quantity: 5, atIndex: 0);
@@ -73,9 +73,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 2);
+        await robot.products.setProductQuantity(2);
         await robot.cart.addToCart();
         await robot.cart.openCart();
         await robot.cart.incrementQuantity(quantity: 2, atIndex: 0);
@@ -91,9 +91,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 5);
+        await robot.products.setProductQuantity(5);
         await robot.cart.addToCart();
         await robot.cart.openCart();
         await robot.cart.decrementQuantity(quantity: 2, atIndex: 0);
@@ -109,7 +109,7 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
 
         //1
         await robot.products.selectProduct();
@@ -135,7 +135,7 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
         await robot.cart.addToCart();
         await robot.cart.openCart();
@@ -152,9 +152,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 5);
+        await robot.products.setProductQuantity(5);
         await robot.cart.addToCart();
         robot.cart.expectItemOutOfStock();
       });
@@ -167,9 +167,9 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
+        await robot.pumpMyAppWithFakes();
         await robot.products.selectProduct();
-        await robot.products.setProductQuantity(quantity: 5);
+        await robot.products.setProductQuantity(5);
         await robot.cart.addToCart();
         robot.cart.expectItemOutOfStock();
         await robot.goBack();

@@ -5,7 +5,7 @@ import '../../../../robot.dart';
 void main() {
   Future<void> purchaseProduct(Robot robot) async {
     await robot.products.selectProduct();
-    await robot.products.setProductQuantity(quantity: 3);
+    await robot.products.setProductQuantity(3);
     await robot.cart.addToCart();
     await robot.cart.openCart();
     robot.cart.expectItemQuantity(quantity: 3, atIndex: 0);
@@ -23,7 +23,7 @@ void main() {
     (tester) async {
       final robot = Robot(tester);
 
-      await robot.pumpMyApp();
+      await robot.pumpMyAppWithFakes();
       await purchaseProduct(robot);
       await robot.products.selectProduct();
 

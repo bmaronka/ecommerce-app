@@ -1,4 +1,6 @@
-class Review {
+import 'package:equatable/equatable.dart';
+
+class Review extends Equatable {
   const Review({
     required this.rating,
     required this.comment,
@@ -24,12 +26,9 @@ class Review {
   String toString() => 'Review(rating: $rating, comment: $comment, date: $date)';
 
   @override
-  bool operator ==(covariant Review other) {
-    if (identical(this, other)) return true;
-
-    return other.rating == rating && other.comment == comment && other.date == date;
-  }
-
-  @override
-  int get hashCode => rating.hashCode ^ comment.hashCode ^ date.hashCode;
+  List<Object?> get props => [
+        rating,
+        comment,
+        date,
+      ];
 }

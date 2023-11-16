@@ -1,11 +1,6 @@
 import 'package:ecommerce_app/src/app.dart';
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/app_bootstrap_fakes.dart';
 import 'package:ecommerce_app/src/features/cart/application/cart_sync_service.dart';
-import 'package:ecommerce_app/src/features/cart/data/local/fake_local_cart_repository.dart';
-import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
-import 'package:ecommerce_app/src/features/cart/data/remote/fake_remote_cart_repository.dart';
-import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,29 +34,15 @@ class Robot {
   final OrdersRobot orders;
   final ReviewsRobot reviews;
 
-  Future<void> pumpMyApp() async {
-    final productsRepository = FakeProductsRepository(addDelay: false);
-    final authRepository = FakeAuthRepository(addDelay: false);
-    final localCartRepository = FakeLocalCartRepository(addDelay: false);
-    final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
-
+  Future<void> pumpMyAppWithFakes() async {
     GoRouter.optionURLReflectsImperativeAPIs = true;
-
-    final container = ProviderContainer(
-      overrides: [
-        productsRepositoryProvider.overrideWithValue(productsRepository),
-        authRepositoryProvider.overrideWithValue(authRepository),
-        localCartRepositoryProvider.overrideWithValue(localCartRepository),
-        remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
-      ],
-    );
-
+    final container = await createFakesProviderContainer(addDelay: false);
     container.read(cartSyncServiceProvider);
 
     await tester.pumpWidget(
       UncontrolledProviderScope(
         container: container,
-        child: MyApp(),
+        child: const MyApp(),
       ),
     );
     await tester.pumpAndSettle();
@@ -89,5 +70,47 @@ class Robot {
     expect(finder, findsOneWidget);
     await tester.tap(finder);
     await tester.pumpAndSettle();
+  }
+
+  Future<void> fullPurchaseFlow() async {
+    products.expectProductsListLoaded();
+
+    //add to cart
+    await products.selectProduct();
+    await products.setProductQuantity(3);
+    await cart.addToCart();
+    await cart.openCart();
+    cart.expectItemQuantity(quantity: 3, atIndex: 0);
+
+    //checkout
+    await checkout.startCheckout();
+    auth.expectEmailAndPasswordFieldsFound();
+    await auth.enterAndSubmitEmailAndPassword();
+    cart.expectFindNCartItems(count: 1);
+    await checkout.startPayment();
+
+    //orders are plcaed
+    orders.expectNOrderItems();
+    await closePage();
+
+    //cart is empty
+    await cart.openCart();
+    cart.expectEmptyShoppingCart();
+    await closePage();
+
+    //leave review
+    await products.selectProduct();
+    reviews.expectFindLeaveReview();
+    await reviews.tapLeaveReview();
+    await reviews.createAndSubmitReview('Love it!');
+    reviews.expectOneReviewFound();
+    reviews.expectFindText('Love it!');
+
+    //logout
+    await openPopupMenu();
+    await auth.openAccountScreen();
+    await auth.tapLogoutButton();
+    await auth.tapDialogLogoutButton();
+    products.expectProductsListLoaded();
   }
 }

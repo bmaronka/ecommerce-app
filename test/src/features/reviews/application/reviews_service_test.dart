@@ -2,7 +2,7 @@ import 'package:ecommerce_app/src/features/authantication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
+import 'package:ecommerce_app/src/features/reviews/application/fake_reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,7 +38,7 @@ void main() {
     productsRepository = MockFakeProductsRepository();
   });
 
-  ReviewsService makeCheckoutService() {
+  FakeReviewsService makeCheckoutService() {
     final container = ProviderContainer(
       overrides: [
         authRepositoryProvider.overrideWithValue(authRepository),

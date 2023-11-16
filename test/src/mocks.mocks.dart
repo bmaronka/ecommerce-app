@@ -26,7 +26,7 @@ import 'package:ecommerce_app/src/features/products/data/fake_products_repositor
     as _i7;
 import 'package:ecommerce_app/src/features/products/domain/product.dart'
     as _i13;
-import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart'
+import 'package:ecommerce_app/src/features/reviews/application/fake_reviews_service.dart'
     as _i17;
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart'
     as _i8;
@@ -645,11 +645,12 @@ class MockFakeReviewsRepository extends _i1.Mock
       ) as _i9.Future<void>);
 }
 
-/// A class which mocks [ReviewsService].
+/// A class which mocks [FakeReviewsService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockReviewsService extends _i1.Mock implements _i17.ReviewsService {
-  MockReviewsService() {
+class MockFakeReviewsService extends _i1.Mock
+    implements _i17.FakeReviewsService {
+  MockFakeReviewsService() {
     _i1.throwOnMissingStub(this);
   }
 

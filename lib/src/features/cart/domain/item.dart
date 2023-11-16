@@ -1,6 +1,7 @@
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:equatable/equatable.dart';
 
-class Item {
+class Item extends Equatable {
   const Item({
     required this.productId,
     required this.quantity,
@@ -13,12 +14,8 @@ class Item {
   String toString() => 'Item(productId: $productId, quantity: $quantity)';
 
   @override
-  bool operator ==(covariant Item other) {
-    if (identical(this, other)) return true;
-
-    return other.productId == productId && other.quantity == quantity;
-  }
-
-  @override
-  int get hashCode => productId.hashCode ^ quantity.hashCode;
+  List<Object?> get props => [
+        productId,
+        quantity,
+      ];
 }

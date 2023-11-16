@@ -9,22 +9,22 @@ void main() {
       final robot = Robot(tester);
 
       await tester.runAsync(() async {
-        await robot.pumpMyApp();
-        robot.products.expectFindAllProductCards();
+        await robot.pumpMyAppWithFakes();
+        robot.products.expectProductsListLoaded();
 
         await robot.openPopupMenu();
         await robot.auth.openEmailPasswordSignInScreen();
         await robot.auth.tapOnNeedAnAccountButton();
         await robot.auth.enterAndSubmitEmailAndPassword();
 
-        robot.products.expectFindAllProductCards();
+        robot.products.expectProductsListLoaded();
 
         await robot.openPopupMenu();
         await robot.auth.openAccountScreen();
         await robot.auth.tapLogoutButton();
         await robot.auth.tapDialogLogoutButton();
 
-        robot.products.expectFindAllProductCards();
+        robot.products.expectProductsListLoaded();
       });
     },
   );
