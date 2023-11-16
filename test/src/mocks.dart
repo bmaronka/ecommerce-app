@@ -5,7 +5,7 @@ import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_reposito
 import 'package:ecommerce_app/src/features/checkout/application/fake_checkout_service.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
-import 'package:ecommerce_app/src/features/reviews/application/fake_reviews_service.dart';
+import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -26,6 +26,6 @@ class Listener<T> extends Mock {
   FakeOrdersRepository,
   FakeCheckoutService,
   FakeReviewsRepository,
-  FakeReviewsService,
+  ReviewsService,
 ])
 void main() {}

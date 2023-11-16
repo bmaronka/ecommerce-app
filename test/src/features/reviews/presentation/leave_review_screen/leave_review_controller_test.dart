@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/src/features/reviews/application/fake_reviews_service.dart';
+import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/features/reviews/presentation/leave_review_screen/leave_review_controller.dart';
 import 'package:ecommerce_app/src/utils/current_date_provider.dart';
@@ -10,7 +10,7 @@ import '../../../../mocks.dart';
 import '../../../../mocks.mocks.dart';
 
 void main() {
-  late MockFakeReviewsService reviewsService;
+  late MockReviewsService reviewsService;
 
   final testDate = DateTime(2022, 7, 31);
   const testRating = 5.0;
@@ -23,7 +23,7 @@ void main() {
   const testProductId = '1';
   final exception = Exception('Connection failure');
 
-  setUp(() => reviewsService = MockFakeReviewsService());
+  setUp(() => reviewsService = MockReviewsService());
 
   ProviderContainer makeProviderContainer() {
     final container = ProviderContainer(

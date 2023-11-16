@@ -3,38 +3,36 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i10;
+import 'dart:async' as _i9;
 
 import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart'
     as _i3;
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart'
-    as _i9;
+    as _i8;
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart'
-    as _i11;
+    as _i10;
 import 'package:ecommerce_app/src/features/cart/application/cart_service.dart'
-    as _i12;
+    as _i11;
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart'
     as _i4;
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart'
     as _i5;
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart' as _i2;
-import 'package:ecommerce_app/src/features/cart/domain/item.dart' as _i13;
+import 'package:ecommerce_app/src/features/cart/domain/item.dart' as _i12;
 import 'package:ecommerce_app/src/features/checkout/application/fake_checkout_service.dart'
-    as _i16;
+    as _i15;
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart'
     as _i6;
-import 'package:ecommerce_app/src/features/orders/domain/order.dart' as _i15;
+import 'package:ecommerce_app/src/features/orders/domain/order.dart' as _i14;
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart'
     as _i7;
 import 'package:ecommerce_app/src/features/products/domain/product.dart'
-    as _i14;
-import 'package:ecommerce_app/src/features/reviews/application/fake_reviews_service.dart'
-    as _i19;
+    as _i13;
+import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart'
+    as _i18;
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart'
-    as _i17;
-import 'package:ecommerce_app/src/features/reviews/data/reviews_repository.dart'
-    as _i8;
-import 'package:ecommerce_app/src/features/reviews/domain/review.dart' as _i18;
+    as _i16;
+import 'package:ecommerce_app/src/features/reviews/domain/review.dart' as _i17;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -123,22 +121,11 @@ class _FakeDateTime_6 extends _i1.SmartFake implements DateTime {
         );
 }
 
-class _FakeReviewsRepository_7 extends _i1.SmartFake
-    implements _i8.ReviewsRepository {
-  _FakeReviewsRepository_7(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [FakeAuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFakeAuthRepository extends _i1.Mock
-    implements _i9.FakeAuthRepository {
+    implements _i8.FakeAuthRepository {
   MockFakeAuthRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -150,16 +137,16 @@ class MockFakeAuthRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i10.Stream<_i11.AppUser?> authStateChanges() => (super.noSuchMethod(
+  _i9.Stream<_i10.AppUser?> authStateChanges() => (super.noSuchMethod(
         Invocation.method(
           #authStateChanges,
           [],
         ),
-        returnValue: _i10.Stream<_i11.AppUser?>.empty(),
-      ) as _i10.Stream<_i11.AppUser?>);
+        returnValue: _i9.Stream<_i10.AppUser?>.empty(),
+      ) as _i9.Stream<_i10.AppUser?>);
 
   @override
-  _i10.Future<void> signInWithEmailAndPassword(
+  _i9.Future<void> signInWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -171,12 +158,12 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  _i10.Future<void> createUserWithEmailAndPassword(
+  _i9.Future<void> createUserWithEmailAndPassword(
     String? email,
     String? password,
   ) =>
@@ -188,19 +175,19 @@ class MockFakeAuthRepository extends _i1.Mock
             password,
           ],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  _i10.Future<void> signOut() => (super.noSuchMethod(
+  _i9.Future<void> signOut() => (super.noSuchMethod(
         Invocation.method(
           #signOut,
           [],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
   void dispose() => super.noSuchMethod(
@@ -222,31 +209,31 @@ class MockRemoteCartRepository extends _i1.Mock
   }
 
   @override
-  _i10.Future<_i2.Cart> fetchCart(String? uid) => (super.noSuchMethod(
+  _i9.Future<_i2.Cart> fetchCart(String? uid) => (super.noSuchMethod(
         Invocation.method(
           #fetchCart,
           [uid],
         ),
-        returnValue: _i10.Future<_i2.Cart>.value(_FakeCart_0(
+        returnValue: _i9.Future<_i2.Cart>.value(_FakeCart_0(
           this,
           Invocation.method(
             #fetchCart,
             [uid],
           ),
         )),
-      ) as _i10.Future<_i2.Cart>);
+      ) as _i9.Future<_i2.Cart>);
 
   @override
-  _i10.Stream<_i2.Cart> watchCart(String? uid) => (super.noSuchMethod(
+  _i9.Stream<_i2.Cart> watchCart(String? uid) => (super.noSuchMethod(
         Invocation.method(
           #watchCart,
           [uid],
         ),
-        returnValue: _i10.Stream<_i2.Cart>.empty(),
-      ) as _i10.Stream<_i2.Cart>);
+        returnValue: _i9.Stream<_i2.Cart>.empty(),
+      ) as _i9.Stream<_i2.Cart>);
 
   @override
-  _i10.Future<void> setCart(
+  _i9.Future<void> setCart(
     String? uid,
     _i2.Cart? cart,
   ) =>
@@ -258,9 +245,9 @@ class MockRemoteCartRepository extends _i1.Mock
             cart,
           ],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [LocalCartRepository].
@@ -273,44 +260,44 @@ class MockLocalCartRepository extends _i1.Mock
   }
 
   @override
-  _i10.Future<_i2.Cart> fetchCart() => (super.noSuchMethod(
+  _i9.Future<_i2.Cart> fetchCart() => (super.noSuchMethod(
         Invocation.method(
           #fetchCart,
           [],
         ),
-        returnValue: _i10.Future<_i2.Cart>.value(_FakeCart_0(
+        returnValue: _i9.Future<_i2.Cart>.value(_FakeCart_0(
           this,
           Invocation.method(
             #fetchCart,
             [],
           ),
         )),
-      ) as _i10.Future<_i2.Cart>);
+      ) as _i9.Future<_i2.Cart>);
 
   @override
-  _i10.Stream<_i2.Cart> watchCart() => (super.noSuchMethod(
+  _i9.Stream<_i2.Cart> watchCart() => (super.noSuchMethod(
         Invocation.method(
           #watchCart,
           [],
         ),
-        returnValue: _i10.Stream<_i2.Cart>.empty(),
-      ) as _i10.Stream<_i2.Cart>);
+        returnValue: _i9.Stream<_i2.Cart>.empty(),
+      ) as _i9.Stream<_i2.Cart>);
 
   @override
-  _i10.Future<void> setCart(_i2.Cart? cart) => (super.noSuchMethod(
+  _i9.Future<void> setCart(_i2.Cart? cart) => (super.noSuchMethod(
         Invocation.method(
           #setCart,
           [cart],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [CartService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCartService extends _i1.Mock implements _i12.CartService {
+class MockCartService extends _i1.Mock implements _i11.CartService {
   MockCartService() {
     _i1.throwOnMissingStub(this);
   }
@@ -343,34 +330,34 @@ class MockCartService extends _i1.Mock implements _i12.CartService {
       ) as _i5.RemoteCartRepository);
 
   @override
-  _i10.Future<void> setItem(_i13.Item? item) => (super.noSuchMethod(
+  _i9.Future<void> setItem(_i12.Item? item) => (super.noSuchMethod(
         Invocation.method(
           #setItem,
           [item],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  _i10.Future<void> addItem(_i13.Item? item) => (super.noSuchMethod(
+  _i9.Future<void> addItem(_i12.Item? item) => (super.noSuchMethod(
         Invocation.method(
           #addItem,
           [item],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  _i10.Future<void> removeItemById(String? productId) => (super.noSuchMethod(
+  _i9.Future<void> removeItemById(String? productId) => (super.noSuchMethod(
         Invocation.method(
           #removeItemById,
           [productId],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [FakeProductsRepository].
@@ -389,66 +376,66 @@ class MockFakeProductsRepository extends _i1.Mock
       ) as bool);
 
   @override
-  List<_i14.Product> getProductList() => (super.noSuchMethod(
+  List<_i13.Product> getProductList() => (super.noSuchMethod(
         Invocation.method(
           #getProductList,
           [],
         ),
-        returnValue: <_i14.Product>[],
-      ) as List<_i14.Product>);
+        returnValue: <_i13.Product>[],
+      ) as List<_i13.Product>);
 
   @override
-  _i14.Product? getProduct(String? id) => (super.noSuchMethod(Invocation.method(
+  _i13.Product? getProduct(String? id) => (super.noSuchMethod(Invocation.method(
         #getProduct,
         [id],
-      )) as _i14.Product?);
+      )) as _i13.Product?);
 
   @override
-  _i10.Future<List<_i14.Product>> fetchProductsList() => (super.noSuchMethod(
+  _i9.Future<List<_i13.Product>> fetchProductsList() => (super.noSuchMethod(
         Invocation.method(
           #fetchProductsList,
           [],
         ),
-        returnValue: _i10.Future<List<_i14.Product>>.value(<_i14.Product>[]),
-      ) as _i10.Future<List<_i14.Product>>);
+        returnValue: _i9.Future<List<_i13.Product>>.value(<_i13.Product>[]),
+      ) as _i9.Future<List<_i13.Product>>);
 
   @override
-  _i10.Stream<List<_i14.Product>> watchProductsList() => (super.noSuchMethod(
+  _i9.Stream<List<_i13.Product>> watchProductsList() => (super.noSuchMethod(
         Invocation.method(
           #watchProductsList,
           [],
         ),
-        returnValue: _i10.Stream<List<_i14.Product>>.empty(),
-      ) as _i10.Stream<List<_i14.Product>>);
+        returnValue: _i9.Stream<List<_i13.Product>>.empty(),
+      ) as _i9.Stream<List<_i13.Product>>);
 
   @override
-  _i10.Stream<_i14.Product?> watchProduct(String? id) => (super.noSuchMethod(
+  _i9.Stream<_i13.Product?> watchProduct(String? id) => (super.noSuchMethod(
         Invocation.method(
           #watchProduct,
           [id],
         ),
-        returnValue: _i10.Stream<_i14.Product?>.empty(),
-      ) as _i10.Stream<_i14.Product?>);
+        returnValue: _i9.Stream<_i13.Product?>.empty(),
+      ) as _i9.Stream<_i13.Product?>);
 
   @override
-  _i10.Future<void> setProduct(_i14.Product? product) => (super.noSuchMethod(
+  _i9.Future<void> setProduct(_i13.Product? product) => (super.noSuchMethod(
         Invocation.method(
           #setProduct,
           [product],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 
   @override
-  _i10.Future<List<_i14.Product>> searchProducts(String? query) =>
+  _i9.Future<List<_i13.Product>> searchProducts(String? query) =>
       (super.noSuchMethod(
         Invocation.method(
           #searchProducts,
           [query],
         ),
-        returnValue: _i10.Future<List<_i14.Product>>.value(<_i14.Product>[]),
-      ) as _i10.Future<List<_i14.Product>>);
+        returnValue: _i9.Future<List<_i13.Product>>.value(<_i13.Product>[]),
+      ) as _i9.Future<List<_i13.Product>>);
 }
 
 /// A class which mocks [FakeOrdersRepository].
@@ -467,7 +454,7 @@ class MockFakeOrdersRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i10.Stream<List<_i15.Order>> watchUserOrders(
+  _i9.Stream<List<_i14.Order>> watchUserOrders(
     String? uid, {
     String? productId,
   }) =>
@@ -477,13 +464,13 @@ class MockFakeOrdersRepository extends _i1.Mock
           [uid],
           {#productId: productId},
         ),
-        returnValue: _i10.Stream<List<_i15.Order>>.empty(),
-      ) as _i10.Stream<List<_i15.Order>>);
+        returnValue: _i9.Stream<List<_i14.Order>>.empty(),
+      ) as _i9.Stream<List<_i14.Order>>);
 
   @override
-  _i10.Future<void> addOrder(
+  _i9.Future<void> addOrder(
     String? uid,
-    _i15.Order? order,
+    _i14.Order? order,
   ) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -493,16 +480,16 @@ class MockFakeOrdersRepository extends _i1.Mock
             order,
           ],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [FakeCheckoutService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFakeCheckoutService extends _i1.Mock
-    implements _i16.FakeCheckoutService {
+    implements _i15.FakeCheckoutService {
   MockFakeCheckoutService() {
     _i1.throwOnMissingStub(this);
   }
@@ -553,21 +540,21 @@ class MockFakeCheckoutService extends _i1.Mock
       ) as DateTime Function());
 
   @override
-  _i10.Future<void> placeOrder() => (super.noSuchMethod(
+  _i9.Future<void> placeOrder() => (super.noSuchMethod(
         Invocation.method(
           #placeOrder,
           [],
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
 /// A class which mocks [FakeReviewsRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFakeReviewsRepository extends _i1.Mock
-    implements _i17.FakeReviewsRepository {
+    implements _i16.FakeReviewsRepository {
   MockFakeReviewsRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -579,7 +566,7 @@ class MockFakeReviewsRepository extends _i1.Mock
       ) as bool);
 
   @override
-  _i10.Stream<_i18.Review?> watchUserReview(
+  _i9.Stream<_i17.Review?> watchUserReview(
     String? id,
     String? uid,
   ) =>
@@ -591,11 +578,11 @@ class MockFakeReviewsRepository extends _i1.Mock
             uid,
           ],
         ),
-        returnValue: _i10.Stream<_i18.Review?>.empty(),
-      ) as _i10.Stream<_i18.Review?>);
+        returnValue: _i9.Stream<_i17.Review?>.empty(),
+      ) as _i9.Stream<_i17.Review?>);
 
   @override
-  _i10.Future<_i18.Review?> fetchUserReview(
+  _i9.Future<_i17.Review?> fetchUserReview(
     String? id,
     String? uid,
   ) =>
@@ -607,34 +594,32 @@ class MockFakeReviewsRepository extends _i1.Mock
             uid,
           ],
         ),
-        returnValue: _i10.Future<_i18.Review?>.value(),
-      ) as _i10.Future<_i18.Review?>);
+        returnValue: _i9.Future<_i17.Review?>.value(),
+      ) as _i9.Future<_i17.Review?>);
 
   @override
-  _i10.Stream<List<_i18.Review>> watchReviews(String? id) =>
-      (super.noSuchMethod(
+  _i9.Stream<List<_i17.Review>> watchReviews(String? id) => (super.noSuchMethod(
         Invocation.method(
           #watchReviews,
           [id],
         ),
-        returnValue: _i10.Stream<List<_i18.Review>>.empty(),
-      ) as _i10.Stream<List<_i18.Review>>);
+        returnValue: _i9.Stream<List<_i17.Review>>.empty(),
+      ) as _i9.Stream<List<_i17.Review>>);
 
   @override
-  _i10.Future<List<_i18.Review>> fetchReviews(String? id) =>
-      (super.noSuchMethod(
+  _i9.Future<List<_i17.Review>> fetchReviews(String? id) => (super.noSuchMethod(
         Invocation.method(
           #fetchReviews,
           [id],
         ),
-        returnValue: _i10.Future<List<_i18.Review>>.value(<_i18.Review>[]),
-      ) as _i10.Future<List<_i18.Review>>);
+        returnValue: _i9.Future<List<_i17.Review>>.value(<_i17.Review>[]),
+      ) as _i9.Future<List<_i17.Review>>);
 
   @override
-  _i10.Future<void> setReview({
+  _i9.Future<void> setReview({
     required String? productId,
     required String? uid,
-    required _i18.Review? review,
+    required _i17.Review? review,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -646,51 +631,23 @@ class MockFakeReviewsRepository extends _i1.Mock
             #review: review,
           },
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }
 
-/// A class which mocks [FakeReviewsService].
+/// A class which mocks [ReviewsService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockFakeReviewsService extends _i1.Mock
-    implements _i19.FakeReviewsService {
-  MockFakeReviewsService() {
+class MockReviewsService extends _i1.Mock implements _i18.ReviewsService {
+  MockReviewsService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.AuthRepository get fakeAuthRepository => (super.noSuchMethod(
-        Invocation.getter(#fakeAuthRepository),
-        returnValue: _FakeAuthRepository_1(
-          this,
-          Invocation.getter(#fakeAuthRepository),
-        ),
-      ) as _i3.AuthRepository);
-
-  @override
-  _i8.ReviewsRepository get fakeReviewsRepository => (super.noSuchMethod(
-        Invocation.getter(#fakeReviewsRepository),
-        returnValue: _FakeReviewsRepository_7(
-          this,
-          Invocation.getter(#fakeReviewsRepository),
-        ),
-      ) as _i8.ReviewsRepository);
-
-  @override
-  _i7.FakeProductsRepository get fakeProductsRepository => (super.noSuchMethod(
-        Invocation.getter(#fakeProductsRepository),
-        returnValue: _FakeFakeProductsRepository_5(
-          this,
-          Invocation.getter(#fakeProductsRepository),
-        ),
-      ) as _i7.FakeProductsRepository);
-
-  @override
-  _i10.Future<void> submitReview({
+  _i9.Future<void> submitReview({
     required String? productId,
-    required _i18.Review? review,
+    required _i17.Review? review,
   }) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -701,7 +658,7 @@ class MockFakeReviewsService extends _i1.Mock
             #review: review,
           },
         ),
-        returnValue: _i10.Future<void>.value(),
-        returnValueForMissingStub: _i10.Future<void>.value(),
-      ) as _i10.Future<void>);
+        returnValue: _i9.Future<void>.value(),
+        returnValueForMissingStub: _i9.Future<void>.value(),
+      ) as _i9.Future<void>);
 }

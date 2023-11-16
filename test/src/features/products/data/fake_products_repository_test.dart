@@ -37,7 +37,7 @@ void main() {
   test(
     'fetchProductList returns global list',
     () async {
-      final products = await repository.fetchProductList();
+      final products = await repository.fetchProductsList();
 
       expect(products, kTestProducts);
     },
@@ -46,7 +46,7 @@ void main() {
   test(
     'watchProductList emits global list',
     () async {
-      final productsStream = repository.watchProductList();
+      final productsStream = repository.watchProductsList();
 
       expect(productsStream, emits(kTestProducts));
     },

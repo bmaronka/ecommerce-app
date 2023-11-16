@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
 import 'package:ecommerce_app/src/common_widgets/primary_button.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_form_type.dart';
@@ -141,7 +142,7 @@ class AuthRobot {
           overrides: [
             if (authRepository != null) authRepositoryProvider.overrideWithValue(authRepository),
           ],
-          child: MaterialApp(
+          child: const MaterialApp(
             home: AccountScreen(),
           ),
         ),

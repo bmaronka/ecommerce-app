@@ -33,7 +33,7 @@ class AccountScreen extends ConsumerWidget {
       ),
       body: const ResponsiveCenter(
         padding: EdgeInsets.symmetric(horizontal: Sizes.p16),
-        child: UserDataTable(),
+        child: const AccountScreenContents(),
       ),
     );
   }
@@ -52,59 +52,30 @@ class AccountScreen extends ConsumerWidget {
   }
 }
 
-class UserDataTable extends ConsumerWidget {
-  const UserDataTable({super.key});
+class AccountScreenContents extends ConsumerWidget {
+  const AccountScreenContents({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final style = Theme.of(context).textTheme.titleSmall!;
     final user = ref.watch(authStateChangesProvider).value;
 
-    return DataTable(
-      columns: [
-        DataColumn(
-          label: Text(
-            'Field'.hardcoded,
-            style: style,
-          ),
+    if (user == null) {
+      return const SizedBox.shrink();
+    }
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          user.uid,
+          style: Theme.of(context).textTheme.bodySmall,
         ),
-        DataColumn(
-          label: Text(
-            'Value'.hardcoded,
-            style: style,
-          ),
-        ),
-      ],
-      rows: [
-        _makeDataRow(
-          'uid'.hardcoded,
-          user?.uid ?? '',
-          style,
-        ),
-        _makeDataRow(
-          'email'.hardcoded,
-          user?.email ?? '',
-          style,
+        gapH32,
+        Text(
+          user.email ?? '',
+          style: Theme.of(context).textTheme.titleMedium,
         ),
       ],
     );
   }
-
-  DataRow _makeDataRow(String name, String value, TextStyle style) => DataRow(
-        cells: [
-          DataCell(
-            Text(
-              name,
-              style: style,
-            ),
-          ),
-          DataCell(
-            Text(
-              value,
-              style: style,
-              maxLines: 2,
-            ),
-          ),
-        ],
-      );
 }

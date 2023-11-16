@@ -2,13 +2,12 @@ import 'package:ecommerce_app/src/features/authantication/data/fake_auth_reposit
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
+import 'package:ecommerce_app/src/features/checkout/application/checkout_service.dart';
 import 'package:ecommerce_app/src/features/checkout/application/fake_checkout_service.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:ecommerce_app/src/utils/current_date_provider.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 
@@ -19,6 +18,8 @@ void main() {
   late RemoteCartRepository remoteCartRepository;
   late FakeOrdersRepository fakeOrdersRepository;
   late FakeProductsRepository fakeProductsRepository;
+
+  late CheckoutService checkoutService;
 
   const testUser = AppUser(uid: 'abc');
   final testDate = DateTime(2022, 7, 13);
@@ -47,28 +48,20 @@ void main() {
     remoteCartRepository = MockRemoteCartRepository();
     fakeOrdersRepository = MockFakeOrdersRepository();
     fakeProductsRepository = MockFakeProductsRepository();
-  });
 
-  FakeCheckoutService makeCheckoutService() {
-    final container = ProviderContainer(
-      overrides: [
-        authRepositoryProvider.overrideWithValue(fakeAuthRepository),
-        remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
-        ordersRepositoryProvider.overrideWithValue(fakeOrdersRepository),
-        productsRepositoryProvider.overrideWithValue(fakeProductsRepository),
-        currentDateBuilderProvider.overrideWithValue(() => testDate),
-      ],
+    checkoutService = FakeCheckoutService(
+      fakeAuthRepository: fakeAuthRepository,
+      remoteCartRepository: remoteCartRepository,
+      fakeOrdersRepository: fakeOrdersRepository,
+      fakeProductsRepository: fakeProductsRepository,
+      dateBuilder: () => testDate,
     );
-    addTearDown(container.dispose);
-
-    return container.read(checkoutServiceProvider);
-  }
+  });
 
   test(
     'null user throws',
     () {
       when(fakeAuthRepository.currentUser).thenReturn(null);
-      final checkoutService = makeCheckoutService();
 
       expect(checkoutService.placeOrder(), throwsA(isA<TypeError>()));
     },
@@ -77,7 +70,6 @@ void main() {
   test('empty cart, throws', () async {
     when(fakeAuthRepository.currentUser).thenReturn(testUser);
     when(remoteCartRepository.fetchCart(testUser.uid)).thenAnswer((_) => Future.value(const Cart()));
-    final checkoutService = makeCheckoutService();
 
     expect(checkoutService.placeOrder, throwsStateError);
   });
@@ -88,7 +80,6 @@ void main() {
       when(fakeAuthRepository.currentUser).thenReturn(testUser);
       when(remoteCartRepository.fetchCart(testUser.uid)).thenAnswer((_) => Future.value(const Cart({'1': 1})));
       when(fakeProductsRepository.getProduct('1')).thenReturn(testProduct);
-      final checkoutService = makeCheckoutService();
 
       await checkoutService.placeOrder();
 

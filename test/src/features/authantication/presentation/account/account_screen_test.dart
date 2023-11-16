@@ -8,14 +8,18 @@ import '../../auth_robot.dart';
 void main() {
   late MockFakeAuthRepository mockFakeAuthRepository;
 
+  final testUser = AppUser(uid: '123', email: 'test@test.com');
+
   setUp(() => mockFakeAuthRepository = MockFakeAuthRepository());
 
   testWidgets(
     'Cancel logout',
     (tester) async {
       final robot = AuthRobot(tester);
+      when(mockFakeAuthRepository.signOut()).thenAnswer((_) => Future.value());
+      when(mockFakeAuthRepository.authStateChanges()).thenAnswer((_) => Stream.value(testUser));
 
-      await robot.pumpAccountScreen();
+      await robot.pumpAccountScreen(authRepository: mockFakeAuthRepository);
       await robot.tapLogoutButton();
       robot.expectLogoutDialogFound();
       await robot.tapCancelButton();
@@ -27,9 +31,11 @@ void main() {
     'Confirm logout, success',
     (tester) async {
       final robot = AuthRobot(tester);
+      when(mockFakeAuthRepository.signOut()).thenAnswer((_) => Future.value());
+      when(mockFakeAuthRepository.authStateChanges()).thenAnswer((_) => Stream.value(testUser));
 
       await tester.runAsync(() async {
-        await robot.pumpAccountScreen();
+        await robot.pumpAccountScreen(authRepository: mockFakeAuthRepository);
         await robot.tapLogoutButton();
         robot.expectLogoutDialogFound();
         await robot.tapDialogLogoutButton();
@@ -47,14 +53,7 @@ void main() {
       final exception = Exception('Exception');
 
       when(mockFakeAuthRepository.signOut()).thenThrow(exception);
-      when(mockFakeAuthRepository.authStateChanges()).thenAnswer(
-        (_) => Stream.value(
-          AppUser(
-            uid: '123',
-            email: 'test@test.com',
-          ),
-        ),
-      );
+      when(mockFakeAuthRepository.authStateChanges()).thenAnswer((_) => Stream.value(testUser));
 
       await tester.runAsync(() async {
         await robot.pumpAccountScreen(authRepository: mockFakeAuthRepository);
@@ -74,14 +73,7 @@ void main() {
       final robot = AuthRobot(tester);
 
       when(mockFakeAuthRepository.signOut()).thenAnswer((_) => Future.delayed(const Duration(seconds: 1)));
-      when(mockFakeAuthRepository.authStateChanges()).thenAnswer(
-        (_) => Stream.value(
-          AppUser(
-            uid: '123',
-            email: 'test@test.com',
-          ),
-        ),
-      );
+      when(mockFakeAuthRepository.authStateChanges()).thenAnswer((_) => Stream.value(testUser));
 
       await tester.runAsync(() async {
         await robot.pumpAccountScreen(authRepository: mockFakeAuthRepository);
