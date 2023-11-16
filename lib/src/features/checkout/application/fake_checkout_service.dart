@@ -1,16 +1,13 @@
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
+import 'package:ecommerce_app/src/features/checkout/application/checkout_service.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/domain/order.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
-import 'package:ecommerce_app/src/utils/current_date_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_checkout_service.g.dart';
-
-class FakeCheckoutService {
+class FakeCheckoutService implements CheckoutService {
   FakeCheckoutService({
     required this.fakeAuthRepository,
     required this.remoteCartRepository,
@@ -19,12 +16,13 @@ class FakeCheckoutService {
     required this.dateBuilder,
   });
 
-  final FakeAuthRepository fakeAuthRepository;
+  final AuthRepository fakeAuthRepository;
   final RemoteCartRepository remoteCartRepository;
   final FakeOrdersRepository fakeOrdersRepository;
   final FakeProductsRepository fakeProductsRepository;
   final DateTime Function() dateBuilder;
 
+  @override
   Future<void> placeOrder() async {
     final uid = fakeAuthRepository.currentUser!.uid;
     final cart = await remoteCartRepository.fetchCart(uid);
@@ -62,12 +60,3 @@ class FakeCheckoutService {
         .reduce((value, element) => value + element);
   }
 }
-
-@riverpod
-FakeCheckoutService checkoutService(CheckoutServiceRef ref) => FakeCheckoutService(
-      fakeAuthRepository: ref.read(authRepositoryProvider),
-      remoteCartRepository: ref.read(remoteCartRepositoryProvider),
-      fakeOrdersRepository: ref.read(ordersRepositoryProvider),
-      fakeProductsRepository: ref.read(productsRepositoryProvider),
-      dateBuilder: ref.read(currentDateBuilderProvider),
-    );

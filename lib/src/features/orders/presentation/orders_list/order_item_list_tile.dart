@@ -5,7 +5,7 @@ import 'package:ecommerce_app/src/common_widgets/loading_text_placeholder.dart';
 import 'package:ecommerce_app/src/common_widgets/shimmer_effect_widget.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +17,7 @@ class OrderItemListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productValue = ref.watch(productStreamProvider(item.productId));
+    final productValue = ref.watch(productProvider(item.productId));
 
     return AsyncValueWidget(
       value: productValue,

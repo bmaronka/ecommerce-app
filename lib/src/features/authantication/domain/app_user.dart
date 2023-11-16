@@ -1,10 +1,12 @@
+typedef UserID = String;
+
 class AppUser {
   const AppUser({
     required this.uid,
     this.email,
   });
 
-  final String uid;
+  final UserID uid;
   final String? email;
 
   AppUser copyWith({

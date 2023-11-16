@@ -1,25 +1,27 @@
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
+import 'package:ecommerce_app/src/features/reviews/data/reviews_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/domain/review.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_reviews_repository.g.dart';
-
-class FakeReviewsRepository {
+class FakeReviewsRepository implements ReviewsRepository {
   FakeReviewsRepository({this.addDelay = true});
+
   final bool addDelay;
 
   final _reviews = InMemoryStore<Map<ProductID, Map<String, Review>>>({});
 
+  @override
   Stream<Review?> watchUserReview(ProductID id, String uid) =>
       _reviews.stream.map((reviewsData) => reviewsData[id]?[uid]);
 
+  @override
   Future<Review?> fetchUserReview(ProductID id, String uid) async {
     await delay(addDelay);
     return Future.value(_reviews.value[id]?[uid]);
   }
 
+  @override
   Stream<List<Review>> watchReviews(ProductID id) => _reviews.stream.map((reviewsData) {
         final reviews = reviewsData[id];
         if (reviews == null) {
@@ -29,6 +31,7 @@ class FakeReviewsRepository {
         }
       });
 
+  @override
   Future<List<Review>> fetchReviews(ProductID id) async {
     final reviews = _reviews.value[id];
     if (reviews == null) {
@@ -38,6 +41,7 @@ class FakeReviewsRepository {
     }
   }
 
+  @override
   Future<void> setReview({
     required ProductID productId,
     required String uid,
@@ -54,10 +58,3 @@ class FakeReviewsRepository {
     _reviews.value = allReviews;
   }
 }
-
-@Riverpod(keepAlive: true)
-FakeReviewsRepository reviewsRepository(ReviewsRepositoryRef ref) => FakeReviewsRepository();
-
-@riverpod
-Stream<List<Review>> productReviews(ProductReviewsRef ref, ProductID productId) =>
-    ref.watch(reviewsRepositoryProvider).watchReviews(productId);

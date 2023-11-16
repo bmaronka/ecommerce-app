@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'account_screen_controller.g.dart';

@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/account/account_screen.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_form_type.dart';
 import 'package:ecommerce_app/src/features/authantication/presentation/sign_in/email_password_sign_in_screen.dart';
@@ -34,7 +34,7 @@ GoRouter goRouter(GoRouterRef ref) {
   return _buildRouter(authRepo);
 }
 
-GoRouter _buildRouter(FakeAuthRepository authRepository) => GoRouter(
+GoRouter _buildRouter(AuthRepository authRepository) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: false,
       redirect: (context, state) => _redirect(context, state, authRepository),
@@ -43,7 +43,7 @@ GoRouter _buildRouter(FakeAuthRepository authRepository) => GoRouter(
       errorBuilder: (context, state) => NotFoundScreen(),
     );
 
-FutureOr<String?> _redirect(BuildContext context, GoRouterState state, FakeAuthRepository authRepository) {
+FutureOr<String?> _redirect(BuildContext context, GoRouterState state, AuthRepository authRepository) {
   final path = state.uri.path;
   final isLoggedIn = authRepository.currentUser != null;
 

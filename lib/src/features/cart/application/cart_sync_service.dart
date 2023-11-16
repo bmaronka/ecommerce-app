@@ -2,14 +2,14 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/exceptions/error_logger.dart';
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -55,7 +55,7 @@ class CartSyncService {
 
   Future<List<Item>> _getLocalItemsToAdd(Cart localCart, Cart remoteCart) async {
     final productsRepository = ref.read(productsRepositoryProvider);
-    final products = await productsRepository.fetchProductList();
+    final products = await productsRepository.fetchProductsList();
     final localItemsToAdd = <Item>[];
 
     for (final localItem in localCart.items.entries) {

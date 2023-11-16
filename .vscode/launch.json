@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Launch (no flavor)",
+      "name": "Launch (Firebase)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
@@ -10,6 +10,17 @@
         "--target",
         "lib/main.dart"
       ]
-    }
+    },
+    {
+      "name": "Launch (Fakes)",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/ecommerce_app",
+      "program": "lib/main_fakes.dart",
+      "args": [
+        "--target",
+        "lib/main_fakes.dart"
+      ]
+    },
   ]
 }

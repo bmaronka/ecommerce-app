@@ -7,7 +7,7 @@ part of 'products_search_state_provider.dart';
 // **************************************************************************
 
 String _$productsSearchResultsHash() =>
-    r'e1b38358cc441626e4a4f3685dba743d1da4338d';
+    r'0973947797d644166e8e79fa0861f48ce2092cff';
 
 /// See also [productsSearchResults].
 @ProviderFor(productsSearchResults)

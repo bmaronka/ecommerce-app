@@ -17,15 +17,15 @@ import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.
 import 'package:ecommerce_app/src/features/reviews/data/reviews_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Future<ProviderContainer> createFakesProviderContainer({bool addDelay = true}) async {
+Future<ProviderContainer> createFirebaseProviderContainer({bool addDelay = true}) async {
   // repositories
+  // TODO: Replace with Firebase repositories
   final authRepository = FakeAuthRepository(addDelay: addDelay);
   final productsRepository = FakeProductsRepository(addDelay: addDelay);
   final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
   final localCartRepository = FakeLocalCartRepository(addDelay: false);
   final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
   final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
-
   // services
   final checkoutService = FakeCheckoutService(
     fakeAuthRepository: authRepository,

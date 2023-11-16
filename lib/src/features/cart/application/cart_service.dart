@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/domain/cart.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/domain/mutable_cart.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -20,7 +20,7 @@ class CartService {
     required this.remoteCartRepository,
   });
 
-  final FakeAuthRepository authRepository;
+  final AuthRepository authRepository;
   final LocalCartRepository localCartRepository;
   final RemoteCartRepository remoteCartRepository;
 

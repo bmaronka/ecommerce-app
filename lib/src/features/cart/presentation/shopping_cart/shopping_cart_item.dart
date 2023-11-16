@@ -10,7 +10,7 @@ import 'package:ecommerce_app/src/common_widgets/shimmer_effect_widget.dart';
 import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/cart/domain/item.dart';
 import 'package:ecommerce_app/src/features/cart/presentation/shopping_cart/shopping_cart_screen_controller.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
+import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:ecommerce_app/src/utils/currency_formatter.dart';
@@ -31,7 +31,7 @@ class ShoppingCartItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productValue = ref.watch(productStreamProvider(item.productId));
+    final productValue = ref.watch(productProvider(item.productId));
 
     return AsyncValueWidget(
       value: productValue,

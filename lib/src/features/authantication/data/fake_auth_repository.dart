@@ -1,13 +1,11 @@
 import 'package:ecommerce_app/src/exceptions/exceptions.dart';
+import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/fake_app_user.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'fake_auth_repository.g.dart';
-
-class FakeAuthRepository {
+class FakeAuthRepository implements AuthRepository {
   FakeAuthRepository({this.addDelay = true});
 
   final bool addDelay;
@@ -15,10 +13,13 @@ class FakeAuthRepository {
 
   final List<FakeAppUser> _users = [];
 
+  @override
   Stream<AppUser?> authStateChanges() => _authState.stream;
 
+  @override
   AppUser? get currentUser => _authState.value;
 
+  @override
   Future<void> signInWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
 
@@ -36,6 +37,7 @@ class FakeAuthRepository {
     throw UserNotFoundException();
   }
 
+  @override
   Future<void> createUserWithEmailAndPassword(String email, String password) async {
     await delay(addDelay);
 
@@ -52,6 +54,7 @@ class FakeAuthRepository {
     _createNewUser(email, password);
   }
 
+  @override
   Future<void> signOut() async {
     await delay(addDelay);
     _authState.value = null;
@@ -69,18 +72,4 @@ class FakeAuthRepository {
     _users.add(user);
     _authState.value = user;
   }
-}
-
-@Riverpod(keepAlive: true)
-FakeAuthRepository authRepository(AuthRepositoryRef ref) {
-  final authRepo = FakeAuthRepository();
-
-  ref.onDispose(authRepo.dispose);
-  return authRepo;
-}
-
-@Riverpod(keepAlive: true)
-Stream<AppUser?> authStateChanges(AuthStateChangesRef ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  return authRepository.authStateChanges();
 }
