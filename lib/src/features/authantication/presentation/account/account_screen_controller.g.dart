@@ -7,7 +7,7 @@ part of 'account_screen_controller.dart';
 // **************************************************************************
 
 String _$accountScreenControllerHash() =>
-    r'14042b02c9d941ff36b110750e50db8ba318bcfb';
+    r'29fe94bf223efcf3795477a45316f04a9cd05803';
 
 /// See also [AccountScreenController].
 @ProviderFor(AccountScreenController)

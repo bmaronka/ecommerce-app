@@ -1,7 +1,7 @@
 import 'package:ecommerce_app/src/exceptions/exceptions.dart';
 import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
+import 'package:ecommerce_app/src/features/authantication/data/fake_app_user.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
-import 'package:ecommerce_app/src/features/authantication/domain/fake_app_user.dart';
 import 'package:ecommerce_app/src/utils/delay.dart';
 import 'package:ecommerce_app/src/utils/in_memory_store.dart';
 

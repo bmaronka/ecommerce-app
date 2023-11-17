@@ -1,28 +1,36 @@
-import 'dart:async';
-
+import 'package:ecommerce_app/src/features/authantication/data/firebase_app_user.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'auth_repository.g.dart';
 
-// TODO: Implement with Firebase
-abstract class AuthRepository {
-  Stream<AppUser?> authStateChanges();
+class AuthRepository {
+  const AuthRepository(this._auth);
 
-  AppUser? get currentUser;
+  final FirebaseAuth _auth;
 
-  Future<void> signInWithEmailAndPassword(String email, String password);
+  Stream<AppUser?> authStateChanges() => _auth.authStateChanges().map(_convertUser);
 
-  Future<void> createUserWithEmailAndPassword(String email, String password);
+  AppUser? get currentUser => _convertUser(_auth.currentUser);
 
-  Future<void> signOut();
+  Future<void> signInWithEmailAndPassword(String email, String password) => _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+  Future<void> createUserWithEmailAndPassword(String email, String password) => _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+  Future<void> signOut() => _auth.signOut();
+
+  AppUser? _convertUser(User? user) => user != null ? FirebaseAppUser(user) : null;
 }
 
 @Riverpod(keepAlive: true)
-AuthRepository authRepository(AuthRepositoryRef ref) {
-  // TODO: create and return repository
-  throw UnimplementedError();
-}
+AuthRepository authRepository(AuthRepositoryRef ref) => AuthRepository(FirebaseAuth.instance);
 
 @Riverpod(keepAlive: true)
 Stream<AppUser?> authStateChanges(AuthStateChangesRef ref) {

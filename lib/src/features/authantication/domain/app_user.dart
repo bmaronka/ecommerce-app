@@ -4,19 +4,14 @@ class AppUser {
   const AppUser({
     required this.uid,
     this.email,
+    this.emailVerified = false,
   });
 
   final UserID uid;
   final String? email;
+  final bool emailVerified;
 
-  AppUser copyWith({
-    String? uid,
-    String? email,
-  }) =>
-      AppUser(
-        uid: uid ?? this.uid,
-        email: email ?? this.email,
-      );
+  Future<void> sendEmailVerification() async {} //implemented by subclasses
 
   @override
   String toString() => 'AppUser(uid: $uid, email: $email)';
