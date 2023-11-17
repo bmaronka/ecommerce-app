@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:equatable/equatable.dart';
 
 typedef ProductID = String;
@@ -59,5 +58,27 @@ class Product extends Equatable {
         availableQuantity: availableQuantity ?? this.availableQuantity,
         avgRating: avgRating ?? this.avgRating,
         numRatings: numRatings ?? this.numRatings,
+      );
+
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        'id': id,
+        'imageUrl': imageUrl,
+        'title': title,
+        'description': description,
+        'price': price,
+        'availableQuantity': availableQuantity,
+        'avgRating': avgRating,
+        'numRatings': numRatings,
+      };
+
+  factory Product.fromMap(Map<String, dynamic> map) => Product(
+        id: map['id'] as String,
+        imageUrl: map['imageUrl'] as String,
+        title: map['title'] as String,
+        description: map['description'] as String,
+        price: map['price'] as double,
+        availableQuantity: map['availableQuantity'] as int,
+        avgRating: map['avgRating'] as double,
+        numRatings: map['numRatings'] as int,
       );
 }

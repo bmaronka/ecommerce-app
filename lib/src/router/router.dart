@@ -25,6 +25,10 @@ enum AppRoute {
   orders,
   account,
   signIn,
+  admin,
+  // adminAdd,
+  // adminUploadProduct,
+  // adminEditProduct,
 }
 
 @Riverpod(keepAlive: true)
@@ -129,6 +133,46 @@ List<RouteBase> get _routes => [
                 formType: EmailPasswordSignInFormType.signIn,
               ),
             ),
+          ),
+          GoRoute(
+            path: 'admin',
+            name: AppRoute.admin.name,
+            pageBuilder: (context, state) => const MaterialPage(
+              fullscreenDialog: true,
+              child: const SizedBox.shrink(),
+            ),
+            routes: [
+              //TODO
+              // GoRoute(
+              //   path: 'add',
+              //   name: AppRoute.adminAdd.name,
+              //   pageBuilder: (context, state) => const MaterialPage(
+              //     fullscreenDialog: true,
+              //     child: AdminProductsAddScreen(),
+              //   ),
+              //   routes: [
+              //     GoRoute(
+              //       path: ':id',
+              //       name: AppRoute.adminUploadProduct.name,
+              //       builder: (context, state) {
+              //         final productId = state.pathParameters['id']!;
+              //         return AdminProductUploadScreen(productId: productId);
+              //       },
+              //     ),
+              //   ],
+              // ),
+              // GoRoute(
+              //   path: 'edit/:id',
+              //   name: AppRoute.adminEditProduct.name,
+              //   pageBuilder: (context, state) {
+              //     final productId = state.pathParameters['id']!;
+              //     return MaterialPage(
+              //       fullscreenDialog: true,
+              //       child: AdminProductEditScreen(productId: productId),
+              //     );
+              //   },
+              // ),
+            ],
           ),
         ],
       ),

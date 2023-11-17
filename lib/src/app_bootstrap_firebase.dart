@@ -5,8 +5,6 @@ import 'package:ecommerce_app/src/features/cart/data/remote/fake_remote_cart_rep
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/orders/data/orders_repository.dart';
-import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
-import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/data/reviews_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +12,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Future<ProviderContainer> createFirebaseProviderContainer({bool addDelay = true}) async {
   // repositories
   // TODO: Replace with Firebase repositories
-  final productsRepository = FakeProductsRepository(addDelay: addDelay);
   final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
   final localCartRepository = FakeLocalCartRepository(addDelay: false);
   final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
@@ -23,7 +20,6 @@ Future<ProviderContainer> createFirebaseProviderContainer({bool addDelay = true}
   return ProviderContainer(
     overrides: [
       // repositories
-      productsRepositoryProvider.overrideWithValue(productsRepository),
       reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
       ordersRepositoryProvider.overrideWithValue(ordersRepository),
       localCartRepositoryProvider.overrideWithValue(localCartRepository),

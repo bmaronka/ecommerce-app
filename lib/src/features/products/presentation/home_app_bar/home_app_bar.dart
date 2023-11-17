@@ -16,13 +16,14 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final user = ref.watch(authStateChangesProvider).value;
+    final isAdminUser = user != null; // TODO: Add role-based authorization
 
     if (screenWidth < Breakpoint.tablet) {
       return AppBar(
         title: Text('My Shop'.hardcoded),
         actions: [
           const ShoppingCartIcon(),
-          MoreMenuButton(user: user),
+          MoreMenuButton(user: user, isAdminUser: isAdminUser),
         ],
       );
     } else {
@@ -46,6 +47,12 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
               key: MoreMenuButton.signInKey,
               text: 'Sign In'.hardcoded,
               onPressed: () => context.pushNamed(AppRoute.signIn.name),
+            ),
+          if (isAdminUser)
+            ActionTextButton(
+              key: MoreMenuButton.adminKey,
+              text: 'Admin'.hardcoded,
+              onPressed: () => context.pushNamed(AppRoute.admin.name),
             ),
         ],
       );
