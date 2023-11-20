@@ -17,7 +17,7 @@ class OrderItemListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productValue = ref.watch(productProvider(item.productId));
+    final productValue = ref.watch(productStreamProvider(item.productId));
 
     return AsyncValueWidget(
       value: productValue,

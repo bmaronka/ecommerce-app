@@ -27,6 +27,8 @@ class ImageUploadRepository {
       SettableMetadata(contentType: 'image/jpeg'),
     );
   }
+
+  Future<void> deleteProductImage(String imageUrl) => _storage.refFromURL(imageUrl).delete();
 }
 
 @riverpod

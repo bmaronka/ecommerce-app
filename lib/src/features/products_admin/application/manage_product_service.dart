@@ -3,10 +3,10 @@ import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/products_admin/data/image_upload_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'image_upload_service.g.dart';
+part 'manage_product_service.g.dart';
 
-class ImageUploadService {
-  const ImageUploadService({
+class ManageProductService {
+  const ManageProductService({
     required this.imageUploadRepository,
     required this.productsRepository,
   });
@@ -18,10 +18,15 @@ class ImageUploadService {
     final downloadUrl = await imageUploadRepository.uploadProductImageFromAsset(product.imageUrl);
     await productsRepository.createProduct(product.id, downloadUrl);
   }
+
+  Future<void> deleteProduct(Product product) async {
+    await imageUploadRepository.deleteProductImage(product.imageUrl);
+    await productsRepository.deleteProduct(product.id);
+  }
 }
 
 @riverpod
-ImageUploadService imageUploadService(ImageUploadServiceRef ref) => ImageUploadService(
+ManageProductService manageProductService(ManageProductServiceRef ref) => ManageProductService(
       imageUploadRepository: ref.watch(imageUploadRepositoryProvider),
       productsRepository: ref.watch(productsRepositoryProvider),
     );

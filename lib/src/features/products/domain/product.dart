@@ -74,11 +74,11 @@ class Product extends Equatable {
   factory Product.fromMap(Map<String, dynamic> map) => Product(
         id: map['id'] as String,
         imageUrl: map['imageUrl'] as String,
-        title: map['title'] as String,
-        description: map['description'] as String,
-        price: map['price'] as double,
-        availableQuantity: map['availableQuantity'] as int,
-        avgRating: map['avgRating'] as double,
-        numRatings: map['numRatings'] as int,
+        title: map['title'] ?? '',
+        description: map['description'] ?? '',
+        price: (map['price'] as num?)?.toDouble() ?? 0.0,
+        availableQuantity: (map['availableQuantity'] as num?)?.toInt() ?? 0,
+        avgRating: (map['avgRating'] as num?)?.toDouble() ?? 0.0,
+        numRatings: (map['numRatings'] as num?)?.toInt() ?? 0,
       );
 }

@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:ecommerce_app/src/features/products_admin/application/image_upload_service.dart';
+import 'package:ecommerce_app/src/features/products_admin/application/manage_product_service.dart';
 import 'package:ecommerce_app/src/router/router.dart';
 import 'package:ecommerce_app/src/utils/notifier_mounter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,7 +17,7 @@ class AdminProductUploadController extends _$AdminProductUploadController with N
     try {
       state = AsyncLoading();
 
-      await ref.read(imageUploadServiceProvider).uploadProduct(product);
+      await ref.read(manageProductServiceProvider).uploadProduct(product);
 
       ref.read(goRouterProvider).goNamed(
         AppRoute.adminEditProduct.name,

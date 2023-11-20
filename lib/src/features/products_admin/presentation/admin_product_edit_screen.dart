@@ -1,6 +1,4 @@
 import 'package:ecommerce_app/src/common_widgets/action_text_button.dart';
-import 'package:ecommerce_app/src/common_widgets/alert_dialogs.dart';
-import 'package:ecommerce_app/src/common_widgets/async_value_widget.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_image.dart';
 import 'package:ecommerce_app/src/common_widgets/custom_text_button.dart';
 import 'package:ecommerce_app/src/common_widgets/error_message_widget.dart';
@@ -10,8 +8,10 @@ import 'package:ecommerce_app/src/constants/app_sizes.dart';
 import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:ecommerce_app/src/features/products_admin/data/template_products_providers.dart';
+import 'package:ecommerce_app/src/features/products_admin/presentation/admin_product_edit_controller.dart';
 import 'package:ecommerce_app/src/features/products_admin/presentation/product_validator.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
+import 'package:ecommerce_app/src/utils/async_value_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -25,10 +25,9 @@ class AdminProductEditScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final productValue = ref.watch(productProvider(productId));
+    final productValue = ref.watch(productFutureProvider(productId));
 
-    return AsyncValueWidget<Product?>(
-      value: productValue,
+    return productValue.when(
       data: (product) => product != null
           ? AdminProductEditScreenContents(product: product)
           : Scaffold(
@@ -39,6 +38,8 @@ class AdminProductEditScreen extends ConsumerWidget {
                 child: ErrorMessageWidget('Product not found'.hardcoded),
               ),
             ),
+      error: (e, st) => Scaffold(body: Center(child: ErrorMessageWidget(e.toString()))),
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }
@@ -96,25 +97,46 @@ class _AdminProductScreenContentsState extends ConsumerState<AdminProductEditScr
   }
 
   Future<void> _delete() async {
-    await showAlertDialog(
-      context: context,
-      title: 'Not implemented'.hardcoded,
-    );
+    final success = await ref.read(adminProductEditControllerProvider.notifier).deleteProduct(product);
+
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Product deleted'.hardcoded),
+        ),
+      );
+    }
   }
 
   Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
-      await showAlertDialog(
-        context: context,
-        title: 'Not implemented'.hardcoded,
-      );
+      final success = await ref.read(adminProductEditControllerProvider.notifier).updateProduct(
+            product: product,
+            title: _titleController.text,
+            description: _descriptionController.text,
+            price: _priceController.text,
+            availableQuantity: _availableQuantityController.text,
+          );
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Product updated'.hardcoded),
+          ),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    const isLoading = false;
+    ref.listen(
+      adminProductEditControllerProvider,
+      (_, state) => state.showAlertDialogOnError(context),
+    );
+    final state = ref.watch(adminProductEditControllerProvider);
     const autovalidateMode = AutovalidateMode.disabled;
+    final isLoading = state.isLoading;
 
     return Scaffold(
       appBar: AppBar(

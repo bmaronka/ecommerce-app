@@ -2,6 +2,7 @@ import 'package:ecommerce_app/src/features/products/data/fake_products_repositor
 import 'package:ecommerce_app/src/features/products/data/products_repository.dart';
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'template_products_providers.g.dart';
 
@@ -11,19 +12,16 @@ ProductsRepository templateProductsRepository(TemplateProductsRepositoryRef ref)
 
 @riverpod
 Stream<List<Product>> templateProductsList(TemplateProductsListRef ref) {
-  return ref.watch(templateProductsRepositoryProvider).watchProductsList();
-  // final templateProductsStream =
-  //     ref.watch(templateProductsRepositoryProvider).watchProductsList();
-  // final existingProductsStream =
-  //     ref.watch(productsRepositoryProvider).watchProductsList();
-  // return Rx.combineLatest2(templateProductsStream, existingProductsStream,
-  //     (template, existing) {
-  //   // return only the template products that have not been uploaded yet
-  //   final existingProductIds = existing.map((product) => product.id).toList();
-  //   return template
-  //       .where((product) => !existingProductIds.contains(product.id))
-  //       .toList();
-  // });
+  final templateProductsStream = ref.watch(templateProductsRepositoryProvider).watchProductsList();
+  final existingProductsStream = ref.watch(productsRepositoryProvider).watchProductsList();
+  return Rx.combineLatest2(
+    templateProductsStream,
+    existingProductsStream,
+    (template, existing) {
+      final existingProductIds = existing.map((product) => product.id).toList();
+      return template.where((product) => !existingProductIds.contains(product.id)).toList();
+    },
+  );
 }
 
 @riverpod
