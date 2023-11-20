@@ -1,18 +1,14 @@
 import 'package:ecommerce_app/src/features/checkout/application/checkout_service.dart';
+import 'package:ecommerce_app/src/utils/notifier_mounter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'payment_button_controller.g.dart';
 
 @riverpod
-class PaymentButtonController extends _$PaymentButtonController {
-  final initial = Object();
-  late var current = initial;
-  // An [Object] instance is equal to itself only.
-  bool get mounted => current == initial;
-
+class PaymentButtonController extends _$PaymentButtonController with NotifierMounted {
   @override
   FutureOr<void> build() {
-    ref.onDispose(() => current = Object());
+    ref.onDispose(setUnmounted);
   }
 
   Future<void> pay() async {

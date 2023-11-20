@@ -54,4 +54,10 @@ class FakeProductsRepository implements ProductsRepository {
 
   static Product? _getProduct(List<Product> products, String id) =>
       products.firstWhereOrNull((product) => product.id == id);
+
+  @override
+  Future<void> createProduct(ProductID productId, String imageUrl) {
+    // TODO: implement createProduct
+    throw UnimplementedError();
+  }
 }

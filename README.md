@@ -8,3 +8,5 @@
 - Integration tests
 - Golden tests
 - Firebase Auth
+- Cloud Firestore
+- Firebase Storage

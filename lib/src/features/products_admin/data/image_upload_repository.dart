@@ -1,4 +1,3 @@
-import 'package:ecommerce_app/src/features/products/domain/product.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,9 +9,14 @@ class ImageUploadRepository {
 
   final FirebaseStorage _storage;
 
-  Future<String> uploadProductImageFromAsset(String assetPath, ProductID productId) async {
-    // TODO: Implement
-    throw UnimplementedError();
+  Future<String> uploadProductImageFromAsset(String assetPath) async {
+    final byteData = await rootBundle.load(assetPath);
+    final assetPathComponents = assetPath.split('/');
+    final filename = assetPathComponents.last;
+
+    final result = await _uploadAsset(byteData, filename);
+
+    return result.ref.getDownloadURL();
   }
 
   UploadTask _uploadAsset(ByteData byteData, String filename) {
