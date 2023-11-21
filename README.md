@@ -10,3 +10,4 @@
 - Firebase Auth
 - Cloud Firestore
 - Firebase Storage
+- Cloud Functions
