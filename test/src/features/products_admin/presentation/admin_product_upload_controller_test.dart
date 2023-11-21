@@ -1,5 +1,5 @@
 import 'package:ecommerce_app/src/features/products/domain/product.dart';
-import 'package:ecommerce_app/src/features/products_admin/application/image_upload_service.dart';
+import 'package:ecommerce_app/src/features/products_admin/application/manage_product_service.dart';
 import 'package:ecommerce_app/src/features/products_admin/presentation/admin_product_upload_controller.dart';
 import 'package:ecommerce_app/src/router/router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,7 +11,7 @@ import '../../../mocks.dart';
 import '../../../mocks.mocks.dart';
 
 void main() {
-  late MockImageUploadService imageUploadService;
+  late MockManageProductService manageProductService;
   late GoRouter goRouter;
 
   final exception = Exception('Connection failure');
@@ -25,14 +25,14 @@ void main() {
   );
 
   setUp(() {
-    imageUploadService = MockImageUploadService();
+    manageProductService = MockManageProductService();
     goRouter = MockGoRouter();
   });
 
   ProviderContainer makeProviderContainer() {
     final container = ProviderContainer(
       overrides: [
-        imageUploadServiceProvider.overrideWithValue(imageUploadService),
+        manageProductServiceProvider.overrideWithValue(manageProductService),
         goRouterProvider.overrideWithValue(goRouter),
       ],
     );
@@ -47,7 +47,7 @@ void main() {
       test(
         'success',
         () async {
-          when(imageUploadService.uploadProduct(testProduct)).thenAnswer((_) => Future.value(null));
+          when(manageProductService.uploadProduct(testProduct)).thenAnswer((_) => Future.value(null));
 
           final container = makeProviderContainer();
           final controller = container.read(adminProductUploadControllerProvider.notifier);
@@ -68,7 +68,7 @@ void main() {
             listener(data, argThat(isA<AsyncLoading>())),
           ]);
           verifyNoMoreInteractions(listener);
-          verify(imageUploadService.uploadProduct(testProduct)).called(1);
+          verify(manageProductService.uploadProduct(testProduct)).called(1);
           verify(
             goRouter.goNamed(
               AppRoute.adminEditProduct.name,
@@ -83,7 +83,7 @@ void main() {
       test(
         'failure',
         () async {
-          when(imageUploadService.uploadProduct(testProduct)).thenThrow(exception);
+          when(manageProductService.uploadProduct(testProduct)).thenThrow(exception);
 
           final container = makeProviderContainer();
           final controller = container.read(adminProductUploadControllerProvider.notifier);
@@ -105,7 +105,7 @@ void main() {
             listener(argThat(isA<AsyncLoading>()), argThat(isA<AsyncError>())),
           ]);
           verifyNoMoreInteractions(listener);
-          verify(imageUploadService.uploadProduct(testProduct)).called(1);
+          verify(manageProductService.uploadProduct(testProduct)).called(1);
           verifyNever(
             goRouter.goNamed(
               AppRoute.adminEditProduct.name,

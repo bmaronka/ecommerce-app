@@ -5,7 +5,7 @@ import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_reposito
 import 'package:ecommerce_app/src/features/checkout/application/fake_checkout_service.dart';
 import 'package:ecommerce_app/src/features/orders/data/fake_orders_repository.dart';
 import 'package:ecommerce_app/src/features/products/data/fake_products_repository.dart';
-import 'package:ecommerce_app/src/features/products_admin/application/image_upload_service.dart';
+import 'package:ecommerce_app/src/features/products_admin/application/manage_product_service.dart';
 import 'package:ecommerce_app/src/features/products_admin/data/image_upload_repository.dart';
 import 'package:ecommerce_app/src/features/reviews/application/reviews_service.dart';
 import 'package:ecommerce_app/src/features/reviews/data/fake_reviews_repository.dart';
@@ -31,7 +31,7 @@ class Listener<T> extends Mock {
   FakeReviewsRepository,
   ReviewsService,
   ImageUploadRepository,
-  ImageUploadService,
+  ManageProductService,
   GoRouter,
 ])
 void main() {}

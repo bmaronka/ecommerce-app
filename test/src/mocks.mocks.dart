@@ -30,7 +30,7 @@ import 'package:ecommerce_app/src/features/products/data/products_repository.dar
     as _i9;
 import 'package:ecommerce_app/src/features/products/domain/product.dart'
     as _i20;
-import 'package:ecommerce_app/src/features/products_admin/application/image_upload_service.dart'
+import 'package:ecommerce_app/src/features/products_admin/application/manage_product_service.dart'
     as _i26;
 import 'package:ecommerce_app/src/features/products_admin/data/image_upload_repository.dart'
     as _i8;
@@ -543,6 +543,35 @@ class MockFakeProductsRepository extends _i1.Mock
         returnValue: _i16.Future<void>.value(),
         returnValueForMissingStub: _i16.Future<void>.value(),
       ) as _i16.Future<void>);
+
+  @override
+  _i16.Future<void> updateProduct(_i20.Product? product) => (super.noSuchMethod(
+        Invocation.method(
+          #updateProduct,
+          [product],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+
+  @override
+  _i16.Future<void> deleteProduct(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteProduct,
+          [id],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+
+  @override
+  _i16.Future<_i20.Product?> fetchProduct(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #fetchProduct,
+          [id],
+        ),
+        returnValue: _i16.Future<_i20.Product?>.value(),
+      ) as _i16.Future<_i20.Product?>);
 }
 
 /// A class which mocks [FakeOrdersRepository].
@@ -790,14 +819,24 @@ class MockImageUploadRepository extends _i1.Mock
         ),
         returnValue: _i16.Future<String>.value(''),
       ) as _i16.Future<String>);
+
+  @override
+  _i16.Future<void> deleteProductImage(String? imageUrl) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteProductImage,
+          [imageUrl],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
 }
 
-/// A class which mocks [ImageUploadService].
+/// A class which mocks [ManageProductService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockImageUploadService extends _i1.Mock
-    implements _i26.ImageUploadService {
-  MockImageUploadService() {
+class MockManageProductService extends _i1.Mock
+    implements _i26.ManageProductService {
+  MockManageProductService() {
     _i1.throwOnMissingStub(this);
   }
 
@@ -823,6 +862,16 @@ class MockImageUploadService extends _i1.Mock
   _i16.Future<void> uploadProduct(_i20.Product? product) => (super.noSuchMethod(
         Invocation.method(
           #uploadProduct,
+          [product],
+        ),
+        returnValue: _i16.Future<void>.value(),
+        returnValueForMissingStub: _i16.Future<void>.value(),
+      ) as _i16.Future<void>);
+
+  @override
+  _i16.Future<void> deleteProduct(_i20.Product? product) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteProduct,
           [product],
         ),
         returnValue: _i16.Future<void>.value(),

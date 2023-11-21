@@ -47,7 +47,7 @@ class AdminProductEditController extends _$AdminProductEditController with Notif
 
     state = AsyncLoading();
     final value = await AsyncValue.guard(() => manageProductService.deleteProduct(product));
-    final success = !state.hasError;
+    final success = !value.hasError;
 
     if (mounted) {
       state = value;

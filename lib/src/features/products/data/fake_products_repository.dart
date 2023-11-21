@@ -15,7 +15,7 @@ class FakeProductsRepository implements ProductsRepository {
 
   List<Product> getProductList() => _products.value;
 
-  Product? getProduct(String id) => _getProduct(_products.value, id);
+  Product? getProduct(ProductID id) => _getProduct(_products.value, id);
 
   @override
   Future<List<Product>> fetchProductsList() async => Future.value(_products.value);
@@ -24,7 +24,7 @@ class FakeProductsRepository implements ProductsRepository {
   Stream<List<Product>> watchProductsList() => _products.stream;
 
   @override
-  Stream<Product?> watchProduct(String id) => watchProductsList().map((products) => _getProduct(products, id));
+  Stream<Product?> watchProduct(ProductID id) => watchProductsList().map((products) => _getProduct(products, id));
 
   Future<void> setProduct(Product product) async {
     await delay(addDelay);
@@ -56,26 +56,45 @@ class FakeProductsRepository implements ProductsRepository {
       products.firstWhereOrNull((product) => product.id == id);
 
   @override
-  Future<void> createProduct(ProductID productId, String imageUrl) {
-    // TODO: implement createProduct
-    throw UnimplementedError();
+  Future<void> createProduct(ProductID productId, String imageUrl) async {
+    await delay(addDelay);
+
+    final products = _products.value;
+    final product = Product(
+      id: productId,
+      imageUrl: imageUrl,
+      title: '',
+      description: '',
+      price: 0.0,
+      availableQuantity: 0,
+    );
+
+    products.add(product);
+    _products.value = products;
   }
 
   @override
-  Future<void> updateProduct(Product product) {
-    // TODO: implement updateProduct
-    throw UnimplementedError();
+  Future<void> updateProduct(Product product) async {
+    await delay(addDelay);
+
+    final products = _products.value;
+    final index = products.indexWhere((p) => p.id == product.id);
+
+    products[index] = product;
+    _products.value = products;
   }
 
   @override
-  Future<void> deleteProduct(ProductID id) {
-    // TODO: implement deleteProduct
-    throw UnimplementedError();
+  Future<void> deleteProduct(ProductID id) async {
+    await delay(addDelay);
+
+    final products = _products.value;
+    final index = products.indexWhere((p) => p.id == id);
+
+    products.removeAt(index);
+    _products.value = products;
   }
 
   @override
-  Future<Product?> fetchProduct(ProductID id) {
-    // TODO: implement fetchProduct
-    throw UnimplementedError();
-  }
+  Future<Product?> fetchProduct(ProductID id) async => Future.value(_getProduct(_products.value, id));
 }
