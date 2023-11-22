@@ -11,3 +11,4 @@
 - Cloud Firestore
 - Firebase Storage
 - Cloud Functions
+- Secure rules and Custom claims
