@@ -1,5 +1,6 @@
 import 'package:ecommerce_app/src/app.dart';
 import 'package:ecommerce_app/src/exceptions/error_logger.dart';
+import 'package:ecommerce_app/src/features/authantication/application/user_token_refresh_service.dart';
 import 'package:ecommerce_app/src/features/cart/application/cart_sync_service.dart';
 import 'package:ecommerce_app/src/localization/string_hardcoded.dart';
 import 'package:flutter/foundation.dart';
@@ -11,6 +12,7 @@ class AppBootstrap {
     final errorLogger = container.read(errorLoggerProvider);
     _registerErrorHandlers(errorLogger);
     container.read(cartSyncServiceProvider);
+    container.read(userTokenRefreshServiceProvider);
 
     return UncontrolledProviderScope(
       container: container,

@@ -16,7 +16,7 @@ class HomeAppBar extends ConsumerWidget implements PreferredSizeWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenWidth = MediaQuery.of(context).size.width;
     final user = ref.watch(authStateChangesProvider).value;
-    final isAdminUser = user != null; // TODO: Add role-based authorization
+    final isAdminUser = ref.watch(isCurrentUserAdminProvider).value ?? false;
 
     if (screenWidth < Breakpoint.tablet) {
       return AppBar(

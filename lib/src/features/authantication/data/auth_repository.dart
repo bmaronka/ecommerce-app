@@ -26,6 +26,8 @@ class AuthRepository {
 
   Future<void> signOut() => _auth.signOut();
 
+  Stream<AppUser?> idTokenChanges() => _auth.idTokenChanges().map(_convertUser);
+
   AppUser? _convertUser(User? user) => user != null ? FirebaseAppUser(user) : null;
 }
 
@@ -36,4 +38,20 @@ AuthRepository authRepository(AuthRepositoryRef ref) => AuthRepository(FirebaseA
 Stream<AppUser?> authStateChanges(AuthStateChangesRef ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   return authRepository.authStateChanges();
+}
+
+@Riverpod(keepAlive: true)
+Stream<AppUser?> idTokenChanges(IdTokenChangesRef ref) {
+  final authRepository = ref.watch(authRepositoryProvider);
+  return authRepository.idTokenChanges();
+}
+
+@riverpod
+FutureOr<bool> isCurrentUserAdmin(IsCurrentUserAdminRef ref) {
+  final user = ref.watch(idTokenChangesProvider).value;
+  if (user != null) {
+    return user.isAdmin();
+  } else {
+    return false;
+  }
 }

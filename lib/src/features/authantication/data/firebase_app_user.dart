@@ -17,4 +17,15 @@ class FirebaseAppUser implements AppUser {
 
   @override
   Future<void> sendEmailVerification() => _user.sendEmailVerification();
+
+  @override
+  Future<bool> isAdmin() async {
+    final idTokenResult = await _user.getIdTokenResult();
+    final claims = idTokenResult.claims;
+
+    return claims?['admin'] == true;
+  }
+
+  @override
+  Future<void> forceRefreshIdToken() => _user.getIdToken(true);
 }

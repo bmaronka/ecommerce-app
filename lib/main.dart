@@ -15,7 +15,7 @@ void main() async {
   );
 
   final appBootstrap = AppBootstrap();
-  await appBootstrap.setupEmulators();
+  // await appBootstrap.setupEmulators();
   final container = await appBootstrap.createFirebaseProviderContainer();
   final root = appBootstrap.createRootWidget(container: container);
 

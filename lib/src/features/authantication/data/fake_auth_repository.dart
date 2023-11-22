@@ -72,4 +72,10 @@ class FakeAuthRepository implements AuthRepository {
     _users.add(user);
     _authState.value = user;
   }
+
+  @override
+  Stream<AppUser?> idTokenChanges() {
+    // TODO: implement idTokenChanges
+    throw UnimplementedError();
+  }
 }

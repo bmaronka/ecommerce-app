@@ -51,9 +51,15 @@ GoRouter _buildRouter(AuthRepository authRepository) => GoRouter(
       errorBuilder: (context, state) => NotFoundScreen(),
     );
 
-FutureOr<String?> _redirect(BuildContext context, GoRouterState state, AuthRepository authRepository) {
+FutureOr<String?> _redirect(BuildContext context, GoRouterState state, AuthRepository authRepository) async {
   final path = state.uri.path;
-  final isLoggedIn = authRepository.currentUser != null;
+  final user = authRepository.currentUser;
+  final isLoggedIn = user != null;
+  final isAdmin = (await user?.isAdmin()) ?? false;
+
+  if (!isAdmin && path.startsWith('/admin')) {
+    return '/';
+  }
 
   if (isLoggedIn) {
     if (path == '/signIn') {

@@ -287,6 +287,15 @@ class MockFakeAuthRepository extends _i1.Mock
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  _i16.Stream<_i17.AppUser?> idTokenChanges() => (super.noSuchMethod(
+        Invocation.method(
+          #idTokenChanges,
+          [],
+        ),
+        returnValue: _i16.Stream<_i17.AppUser?>.empty(),
+      ) as _i16.Stream<_i17.AppUser?>);
 }
 
 /// A class which mocks [RemoteCartRepository].

@@ -13,6 +13,10 @@ class AppUser {
 
   Future<void> sendEmailVerification() async {} //implemented by subclasses
 
+  Future<bool> isAdmin() => Future.value(false);
+
+  Future<void> forceRefreshIdToken() async {} //implemented by subclasses
+
   @override
   String toString() => 'AppUser(uid: $uid, email: $email)';
 
