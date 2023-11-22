@@ -173,10 +173,19 @@ class AuthRobot {
   }
 
   Future<void> tapDialogLogoutButton() async {
+    await _tapDialogLogoutButton();
+    await tester.pump();
+  }
+
+  Future<void> tapDialogLogoutButtonAndSettle() async {
+    await _tapDialogLogoutButton();
+    await tester.pumpAndSettle();
+  }
+
+  Future<void> _tapDialogLogoutButton() async {
     final logoutButton = find.byKey(kDialogDefaultKey);
     expect(logoutButton, findsOneWidget);
     await tester.tap(logoutButton);
-    await tester.pump();
   }
 
   void expectErrorAlertFound() {

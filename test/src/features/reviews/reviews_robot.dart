@@ -67,6 +67,11 @@ class ReviewsRobot {
     expect(finder, findsOneWidget);
   }
 
+  Future<void> scrollToAddedReview(String text) async {
+    final finder = find.text(text);
+    await tester.scrollUntilVisible(finder, 50);
+  }
+
   Future<void> updateAndSubmitReview(String comment) async {
     await enterReviewComment(comment);
     await submitReview();

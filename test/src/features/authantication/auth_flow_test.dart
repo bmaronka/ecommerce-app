@@ -22,7 +22,7 @@ void main() {
         await robot.openPopupMenu();
         await robot.auth.openAccountScreen();
         await robot.auth.tapLogoutButton();
-        await robot.auth.tapDialogLogoutButton();
+        await robot.auth.tapDialogLogoutButtonAndSettle();
 
         robot.products.expectProductsListLoaded();
       });

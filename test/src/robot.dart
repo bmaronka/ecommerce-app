@@ -104,6 +104,7 @@ class Robot {
     await reviews.tapLeaveReview();
     await reviews.createAndSubmitReview('Love it!');
     reviews.expectOneReviewFound();
+    await reviews.scrollToAddedReview('Love it!');
     reviews.expectFindText('Love it!');
 
     //logout

@@ -280,15 +280,6 @@ class MockFakeAuthRepository extends _i1.Mock
       ) as _i16.Future<void>);
 
   @override
-  void dispose() => super.noSuchMethod(
-        Invocation.method(
-          #dispose,
-          [],
-        ),
-        returnValueForMissingStub: null,
-      );
-
-  @override
   _i16.Stream<_i17.AppUser?> idTokenChanges() => (super.noSuchMethod(
         Invocation.method(
           #idTokenChanges,
@@ -296,6 +287,15 @@ class MockFakeAuthRepository extends _i1.Mock
         ),
         returnValue: _i16.Stream<_i17.AppUser?>.empty(),
       ) as _i16.Stream<_i17.AppUser?>);
+
+  @override
+  void dispose() => super.noSuchMethod(
+        Invocation.method(
+          #dispose,
+          [],
+        ),
+        returnValueForMissingStub: null,
+      );
 }
 
 /// A class which mocks [RemoteCartRepository].
