@@ -44,13 +44,22 @@ dependencies:
   firebase_storage: 11.5.1
 
 dev_dependencies:
+  #Linters
+  flutter_lints: 3.0.1
+  custom_lint: 0.5.6
+
+  #Tests
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-  flutter_lints: 3.0.1
-  custom_lint: 0.5.6
   mockito: 5.4.2
+  firebase_auth_mocks: 0.13.0
+  mock_exceptions: 0.8.2
+  fake_cloud_firestore: 2.4.3
+  firebase_storage_mocks: 0.6.1
+
+  #Generators
   build_runner: 2.4.6
   riverpod_generator: 2.3.6
 

@@ -1,3 +1,4 @@
+import 'package:ecommerce_app/src/exceptions/exceptions.dart';
 import 'package:ecommerce_app/src/features/authantication/data/fake_auth_repository.dart';
 import 'package:ecommerce_app/src/features/authantication/domain/app_user.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,6 +12,19 @@ void main() {
     uid: email.split('').reversed.join(),
     email: email,
   );
+
+  Future<void> _createUserAndSignOut() async {
+    await fakeAuthRepository.createUserWithEmailAndPassword(
+      email,
+      password,
+    );
+    expect(fakeAuthRepository.currentUser, user);
+    expect(fakeAuthRepository.authStateChanges(), emits(user));
+
+    await fakeAuthRepository.signOut();
+    expect(fakeAuthRepository.currentUser, null);
+    expect(fakeAuthRepository.authStateChanges(), emits(null));
+  }
 
   setUp(() => fakeAuthRepository = FakeAuthRepository(addDelay: false));
 
@@ -26,12 +40,12 @@ void main() {
 
   test(
     'sign in throws when user not found',
-    () async {
+    () {
       addTearDown(fakeAuthRepository.dispose);
 
-      await expectLater(
+      expect(
         fakeAuthRepository.signInWithEmailAndPassword(email, password),
-        throwsA(isA<Exception>()),
+        throwsA(isA<UserNotFoundException>()),
       );
       expect(fakeAuthRepository.currentUser, null);
       expect(fakeAuthRepository.authStateChanges(), emits(null));
@@ -39,32 +53,58 @@ void main() {
   );
 
   test(
-    'currentUser is non null after registration',
+    'signInWithEmailAndPassword sets user',
     () async {
       addTearDown(fakeAuthRepository.dispose);
 
-      await fakeAuthRepository.createUserWithEmailAndPassword(email, password);
+      await _createUserAndSignOut();
 
-      expect(fakeAuthRepository.currentUser, isA<AppUser>());
-      expect(fakeAuthRepository.authStateChanges(), emits(user));
-    },
-  );
-
-  test(
-    'currentUser is null after sign out',
-    () async {
-      addTearDown(fakeAuthRepository.dispose);
-
-      await fakeAuthRepository.createUserWithEmailAndPassword(
+      await fakeAuthRepository.signInWithEmailAndPassword(
         email,
         password,
       );
       expect(fakeAuthRepository.currentUser, user);
       expect(fakeAuthRepository.authStateChanges(), emits(user));
+    },
+  );
 
-      await fakeAuthRepository.signOut();
-      expect(fakeAuthRepository.currentUser, null);
-      expect(fakeAuthRepository.authStateChanges(), emits(null));
+  test(
+    'signInWithEmailAndPassword throws WrongPasswordException',
+    () async {
+      addTearDown(fakeAuthRepository.dispose);
+
+      await _createUserAndSignOut();
+
+      expect(
+        fakeAuthRepository.signInWithEmailAndPassword(email, 'wrongpassword'),
+        throwsA(isA<WrongPasswordException>()),
+      );
+    },
+  );
+
+  test(
+    'createUserWithEmailAndPassword throws EmailAlreadyInUseException',
+    () async {
+      addTearDown(fakeAuthRepository.dispose);
+
+      await _createUserAndSignOut();
+
+      expect(
+        fakeAuthRepository.createUserWithEmailAndPassword(email, password),
+        throwsA(isA<EmailAlreadyInUseException>()),
+      );
+    },
+  );
+
+  test(
+    'createUserWithEmailAndPassword throws WeakPasswordException',
+    () {
+      addTearDown(fakeAuthRepository.dispose);
+
+      expect(
+        fakeAuthRepository.createUserWithEmailAndPassword(email, 'short'),
+        throwsA(isA<WeakPasswordException>()),
+      );
     },
   );
 

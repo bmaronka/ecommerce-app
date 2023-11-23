@@ -28,4 +28,17 @@ class FirebaseAppUser implements AppUser {
 
   @override
   Future<void> forceRefreshIdToken() => _user.getIdToken(true);
+
+  @override
+  String toString() => 'FirebaseAppUser(_user: $_user)';
+
+  @override
+  bool operator ==(covariant FirebaseAppUser other) {
+    if (identical(this, other)) return true;
+
+    return other._user == _user;
+  }
+
+  @override
+  int get hashCode => _user.hashCode;
 }
