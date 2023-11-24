@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/src/app.dart';
+import 'package:ecommerce_app/src/app_bootstrap.dart';
 import 'package:ecommerce_app/src/app_bootstrap_fakes.dart';
 import 'package:ecommerce_app/src/features/cart/application/cart_sync_service.dart';
 import 'package:ecommerce_app/src/features/products/presentation/home_app_bar/more_menu_button.dart';
@@ -39,7 +40,8 @@ class Robot {
 
   Future<void> pumpMyAppWithFakes() async {
     GoRouter.optionURLReflectsImperativeAPIs = true;
-    final container = await createFakesProviderContainer(addDelay: false);
+    final appBootstrap = AppBootstrap();
+    final container = await appBootstrap.createFakesProviderContainer(addDelay: false);
     container.read(cartSyncServiceProvider);
 
     await tester.pumpWidget(
@@ -108,7 +110,7 @@ class Robot {
     await checkout.startPayment();
 
     //orders are plcaed
-    orders.expectNOrderItems();
+    orders.expectFindNOrders(1);
     await closePage();
 
     //cart is empty

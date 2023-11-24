@@ -8,7 +8,7 @@ void main() async {
   usePathUrlStrategy();
 
   final appBootstrap = AppBootstrap();
-  final container = await createFakesProviderContainer();
+  final container = await appBootstrap.createFakesProviderContainer();
   final root = appBootstrap.createRootWidget(container: container);
 
   runApp(root);

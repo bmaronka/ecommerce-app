@@ -12,13 +12,12 @@ void main() {
     () async {
       final container = makeProviderContainer(
         cart: Stream.empty(),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
       );
 
-      await container.read(productsListStreamProvider.future);
       final total = container.read(cartTotalProvider);
 
-      expect(total, 0);
+      expect(total, const AsyncLoading<double>());
     },
   );
 
@@ -27,12 +26,11 @@ void main() {
     () async {
       final container = makeProviderContainer(
         cart: Stream.value(const Cart()),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
       );
 
       await container.read(cartProvider.future);
-      await container.read(productsListStreamProvider.future);
-      final total = container.read(cartTotalProvider);
+      final total = await container.read(cartTotalProvider.future);
 
       expect(total, 0);
     },
@@ -43,12 +41,11 @@ void main() {
     () async {
       final container = makeProviderContainer(
         cart: Stream.value(const Cart({'1': 1})),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
       );
 
       await container.read(cartProvider.future);
-      await container.read(productsListStreamProvider.future);
-      final total = container.read(cartTotalProvider);
+      final total = await container.read(cartTotalProvider.future);
 
       expect(total, 15);
     },
@@ -59,12 +56,11 @@ void main() {
     () async {
       final container = makeProviderContainer(
         cart: Stream.value(const Cart({'1': 5})),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
       );
 
       await container.read(cartProvider.future);
-      await container.read(productsListStreamProvider.future);
-      final total = container.read(cartTotalProvider);
+      final total = await container.read(cartTotalProvider.future);
 
       expect(total, 75);
     },
@@ -79,12 +75,11 @@ void main() {
       });
       final container = makeProviderContainer(
         cart: Stream.value(cart),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
       );
 
       await container.read(cartProvider.future);
-      await container.read(productsListStreamProvider.future);
-      final total = container.read(cartTotalProvider);
+      final total = await container.read(cartTotalProvider.future);
 
       expect(total, 71);
     },
@@ -95,12 +90,12 @@ void main() {
     () async {
       final container = makeProviderContainer(
         cart: Stream.value(const Cart({'100': 1})),
-        products: Stream.value(kTestProducts),
+        products: kTestProducts,
+        notFoundProducts: ['100'],
       );
 
       await container.read(cartProvider.future);
-      await container.read(productsListStreamProvider.future);
-      final total = container.read(cartTotalProvider);
+      final total = await container.read(cartTotalProvider.future);
 
       expect(total, 0);
     },
@@ -109,15 +104,16 @@ void main() {
 
 ProviderContainer makeProviderContainer({
   required Stream<Cart> cart,
-  required Stream<List<Product>> products,
+  required List<Product> products,
+  List<ProductID> notFoundProducts = const [],
 }) {
   final container = ProviderContainer(
     overrides: [
       cartProvider.overrideWith((ref) => cart),
-      productsListStreamProvider.overrideWith((ref) => products),
+      for (final p in products) productStreamProvider(p.id).overrideWith((ref) => Stream.value(p)),
+      for (final pid in notFoundProducts) productStreamProvider(pid).overrideWith((ref) => Stream.value(null)),
     ],
   );
-
   addTearDown(container.dispose);
   return container;
 }

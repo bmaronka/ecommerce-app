@@ -6,7 +6,12 @@ class OrdersRobot {
 
   final WidgetTester tester;
 
-  void expectNOrderItems({int count = 1}) {
+  void expectFindZeroOrders() {
+    final finder = find.byType(OrderCard);
+    expect(finder, findsNothing);
+  }
+
+  void expectFindNOrders(int count) {
     final finder = find.byType(OrderCard);
     expect(finder, findsNWidgets(count));
   }
