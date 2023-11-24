@@ -56,3 +56,39 @@ Future<ProviderContainer> createFakesProviderContainer({bool addDelay = true}) a
     observers: [AsyncErrorLogger()],
   );
 }
+
+//TODO waiting for idTokenChanges added to MockFirebaseAuth
+// const email = 'test@test.com';
+// final mockUser = MockUser(
+//   email: email,
+//   uid: email.split('').reversed.join(),
+// );
+
+// Future<ProviderContainer> createMockedFirebaseProviderContainer({bool addDelay = true}) async {
+//   final authRepository = AuthRepository(MockFirebaseAuth(mockUser: mockUser));
+//   final productsRepository = ProductsRepository(FakeFirebaseFirestore());
+//   final imageUploadRepository = ImageUploadRepository(MockFirebaseStorage());
+//   final reviewsRepository = FakeReviewsRepository(addDelay: addDelay);
+//   final localCartRepository = FakeLocalCartRepository(addDelay: false);
+//   final remoteCartRepository = FakeRemoteCartRepository(addDelay: false);
+//   final ordersRepository = FakeOrdersRepository(addDelay: addDelay);
+
+//   final manageProductService = ManageProductService(
+//     productsRepository: productsRepository,
+//     imageUploadRepository: imageUploadRepository,
+//   );
+
+//   return ProviderContainer(
+//     overrides: [
+//       authRepositoryProvider.overrideWithValue(authRepository),
+//       productsRepositoryProvider.overrideWithValue(productsRepository),
+//       reviewsRepositoryProvider.overrideWithValue(reviewsRepository),
+//       ordersRepositoryProvider.overrideWithValue(ordersRepository),
+//       localCartRepositoryProvider.overrideWithValue(localCartRepository),
+//       remoteCartRepositoryProvider.overrideWithValue(remoteCartRepository),
+//       imageUploadRepositoryProvider.overrideWithValue(imageUploadRepository),
+//       manageProductServiceProvider.overrideWithValue(manageProductService),
+//     ],
+//     observers: [AsyncErrorLogger()],
+//   );
+// }

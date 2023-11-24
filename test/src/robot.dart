@@ -12,6 +12,7 @@ import 'features/cart/cart_robot.dart';
 import 'features/checkout/checkout_robot.dart';
 import 'features/orders/orders_robot.dart';
 import 'features/products/products_robot.dart';
+import 'features/products_admin/products_admin_robot.dart';
 import 'features/reviews/reviews_robot.dart';
 import 'goldens/golden_robot.dart';
 
@@ -20,19 +21,21 @@ class Robot {
       : auth = AuthRobot(tester),
         cart = CartRobot(tester),
         products = ProductsRobot(tester),
-        golden = GoldenRobot(tester),
         checkout = CheckoutRobot(tester),
         orders = OrdersRobot(tester),
-        reviews = ReviewsRobot(tester);
+        reviews = ReviewsRobot(tester),
+        productsAdmin = ProductsAdminRobot(tester),
+        golden = GoldenRobot(tester);
 
   final WidgetTester tester;
   final AuthRobot auth;
   final CartRobot cart;
   final ProductsRobot products;
-  final GoldenRobot golden;
   final CheckoutRobot checkout;
   final OrdersRobot orders;
   final ReviewsRobot reviews;
+  final ProductsAdminRobot productsAdmin;
+  final GoldenRobot golden;
 
   Future<void> pumpMyAppWithFakes() async {
     GoRouter.optionURLReflectsImperativeAPIs = true;
@@ -47,6 +50,21 @@ class Robot {
     );
     await tester.pumpAndSettle();
   }
+
+  //TODO waiting for idTokenChanges added to MockFirebaseAuth
+  // Future<void> pumpMyAppWithMockedFirebase() async {
+  //   GoRouter.optionURLReflectsImperativeAPIs = true;
+  //   final container = await createMockedFirebaseProviderContainer(addDelay: false);
+  //   container.read(cartSyncServiceProvider);
+
+  //   await tester.pumpWidget(
+  //     UncontrolledProviderScope(
+  //       container: container,
+  //       child: const MyApp(),
+  //     ),
+  //   );
+  //   await tester.pumpAndSettle();
+  // }
 
   Future<void> openPopupMenu() async {
     final finder = find.byType(MoreMenuButton);
