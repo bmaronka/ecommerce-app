@@ -49,11 +49,11 @@ final cartItemsCountProvider = Provider<int>.internal(
 );
 
 typedef CartItemsCountRef = ProviderRef<int>;
-String _$cartTotalHash() => r'7a9255e37dfc5ed7714d452ecc83290ef96ed01a';
+String _$cartTotalHash() => r'c6b798b813ac967175f7b7dd60ac2a91209fbb21';
 
 /// See also [cartTotal].
 @ProviderFor(cartTotal)
-final cartTotalProvider = AutoDisposeProvider<double>.internal(
+final cartTotalProvider = AutoDisposeFutureProvider<double>.internal(
   cartTotal,
   name: r'cartTotalProvider',
   debugGetCreateSourceHash:
@@ -62,7 +62,7 @@ final cartTotalProvider = AutoDisposeProvider<double>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef CartTotalRef = AutoDisposeProviderRef<double>;
+typedef CartTotalRef = AutoDisposeFutureProviderRef<double>;
 String _$itemAvailableQuantityHash() =>
     r'5262dd031e39fc4526529f5768d1f9bb6233259a';
 

@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:ecommerce_app/src/features/authantication/data/auth_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/local/local_cart_repository.dart';
 import 'package:ecommerce_app/src/features/cart/data/remote/remote_cart_repository.dart';
@@ -88,21 +87,25 @@ int cartItemsCount(CartItemsCountRef ref) => ref.watch(cartProvider).maybeWhen(
     );
 
 @riverpod
-double cartTotal(CartTotalRef ref) {
-  final cart = ref.watch(cartProvider).value ?? const Cart();
-  final productList = ref.watch(productsListStreamProvider).value ?? [];
+Future<double> cartTotal(CartTotalRef ref) async {
+  final cart = await ref.watch(cartProvider.future);
 
-  if (cart.items.isNotEmpty && productList.isNotEmpty) {
-    return cart.items.entries
-        .map((item) => item.value * _findProductPrice(productList, item.key))
-        .reduce((value, element) => value + element);
+  if (cart.items.isNotEmpty) {
+    double total = 0.0;
+
+    for (final item in cart.items.entries) {
+      final product = await ref.watch(productStreamProvider(item.key).future);
+
+      if (product != null) {
+        total += item.value * product.price;
+      }
+    }
+
+    return total;
   }
 
   return 0.0;
 }
-
-double _findProductPrice(List<Product> products, String productId) =>
-    products.firstWhereOrNull((product) => product.id == productId)?.price ?? 0.0;
 
 @riverpod
 int itemAvailableQuantity(ItemAvailableQuantityRef ref, Product product) {
