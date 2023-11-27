@@ -19,7 +19,7 @@ class PaymentPage extends ConsumerWidget {
       (_, state) {
         state.whenOrNull(
           data: (cartTotal) {
-            if (state == 0.0) {
+            if (cartTotal == 0.0) {
               context.goNamed(AppRoute.orders.name);
             }
           },
